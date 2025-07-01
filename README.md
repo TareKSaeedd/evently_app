@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # evently_app
 
 A new Flutter project.
@@ -14,3 +15,6 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# evently_app
+>>>>>>> 7d4099edc36dd9964a9ba308ea31a080c161f4b9
