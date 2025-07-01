@@ -3,7 +3,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-  static const routeName = 'home_screen';
 
   @override
   Widget build(BuildContext context) {
