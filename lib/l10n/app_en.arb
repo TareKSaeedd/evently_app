@@ -4,5 +4,10 @@
     "arabic": "Arabic",
     "theme": "Theme",
     "dark": "Dark",
-    "light": "Light"
+    "light": "Light",
+    "logout": "Logout",
+    "start": "Start",
+    "lets_start": "Let's Start",
+    "personalize_your_experience": "Personalize Your Experience",
+    "choose_your_preferred_theme_and_language_to_get_started_with_a_comfortable_tailored_experience_that_suits_your_style": "Choose your preferred theme and language to get started with a comfortable, tailored experience that suits your style."
 }

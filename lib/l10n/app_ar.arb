@@ -4,5 +4,9 @@
     "arabic": "العربية",
     "theme": "السمة",
     "dark": "ليلي",
-    "light": "نهاري"
+    "light": "نهاري",
+    "logout": "تسجيل خروج",
+    "lets_start": "لنبدأ الآن !",
+    "personalize_your_experience": "خصص تجربتك",
+    "choose_your_preferred_theme_and_language_to_get_started_with_a_comfortable_tailored_experience_that_suits_your_style": "اختر السمة واللغة المفضلة لديك للبدء بتجربة مريحة ومخصصة تناسب أسلوبك."
 }
