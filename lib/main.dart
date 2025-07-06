@@ -2,6 +2,7 @@ import 'package:evently_app/providers/app_language_provider.dart';
 import 'package:evently_app/providers/app_theme_provider.dart';
 import 'package:evently_app/ui/home/home_screen.dart';
 import 'package:evently_app/ui/onboarding/onboarding_screen.dart';
+import 'package:evently_app/ui/onboarding/starting_screen.dart';
 import 'package:evently_app/utils/app_routes.dart';
 import 'package:evently_app/utils/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -31,8 +32,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: AppRoutes.onboardingRouteName,
       routes: {
-        AppRoutes.homeRouteName: (context) => HomeScreen(),
+        AppRoutes.startingScreenName: (context) => StartingScreen(),
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),
+        AppRoutes.homeRouteName: (context) => HomeScreen(),
       },
       locale: Locale(languageProvider.languaege),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
