@@ -10,4 +10,6 @@ class AppAssets {
   static const favoriteIcon = 'assets/images/favorite_icon.png';
   static const profileIcon = 'assets/images/profile_icon.png';
   static const onboardingBody1 = 'assets/images/onboarding_body1.png';
+  static const onboardingBody2 = 'assets/images/onboarding_body2.png';
+  static const onboardingBody3 = 'assets/images/onboarding_body3.png';
 }
