@@ -1,3 +1,7 @@
+import 'package:evently_app/ui/home/tabs/favorite/favorite_tab.dart';
+import 'package:evently_app/ui/home/tabs/home/home_tab.dart';
+import 'package:evently_app/ui/home/tabs/map/map_tab.dart';
+import 'package:evently_app/ui/home/tabs/profile/profile_tab.dart';
 import 'package:evently_app/utils/app_assets.dart';
 import 'package:evently_app/utils/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int selectedIndex = 0;
+  List<Widget> tabs = [HomeTab(), MapTab(), FavoriteTab(), ProfileTab()];
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () {},
         child: Icon(Icons.add, color: AppColors.whiteColor, size: 35),
       ),
+      body: tabs[selectedIndex],
     );
   }
 
