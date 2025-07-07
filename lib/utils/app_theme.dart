@@ -15,6 +15,13 @@ class AppTheme {
       selectedLabelStyle: AppStyles.bold12White,
       unselectedLabelStyle: AppStyles.bold12White,
     ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: AppColors.primaryLight,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: AppColors.whiteColor, width: 4),
+        borderRadius: BorderRadius.circular(75),
+      ),
+    ),
   );
 
   static final ThemeData darkTheme = ThemeData(
@@ -28,6 +35,13 @@ class AppTheme {
       unselectedItemColor: AppColors.whiteColor,
       selectedLabelStyle: AppStyles.bold12White,
       unselectedLabelStyle: AppStyles.bold12White,
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: AppColors.primaryDark,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: AppColors.whiteColor, width: 4),
+        borderRadius: BorderRadius.circular(75),
+      ),
     ),
   );
 }

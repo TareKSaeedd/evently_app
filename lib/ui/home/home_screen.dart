@@ -1,42 +1,74 @@
 import 'package:evently_app/utils/app_assets.dart';
+import 'package:evently_app/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: selectedIndex,
+        onTap: (index) {
+          selectedIndex = index;
+          setState(() {});
+        },
         items: [
-          BuiltBottomNavigationBarItem(
-            iconName: AppAssets.homeIcon,
+          builtBottomNavigationBarItem(
+            index: 0,
+            selectedIcon: AppAssets.iconHomeSelected,
+            unselectedIcon: AppAssets.iconHome,
             label: AppLocalizations.of(context)!.home,
           ),
-          BuiltBottomNavigationBarItem(
-            iconName: AppAssets.mapIcon,
+          builtBottomNavigationBarItem(
+            index: 1,
+            selectedIcon: AppAssets.iconMapSelected,
+            unselectedIcon: AppAssets.iconMap,
             label: AppLocalizations.of(context)!.map,
           ),
-          BuiltBottomNavigationBarItem(
-            iconName: AppAssets.favoriteIcon,
+          builtBottomNavigationBarItem(
+            index: 2,
+            selectedIcon: AppAssets.iconFavoriteSelected,
+            unselectedIcon: AppAssets.iconFavorite,
             label: AppLocalizations.of(context)!.favorites,
           ),
-          BuiltBottomNavigationBarItem(
-            iconName: AppAssets.profileIcon,
+          builtBottomNavigationBarItem(
+            index: 3,
+            selectedIcon: AppAssets.iconProfileSelected,
+            unselectedIcon: AppAssets.iconProfile,
             label: AppLocalizations.of(context)!.profile,
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        elevation: 0,
+        onPressed: () {},
+        child: Icon(Icons.add, color: AppColors.whiteColor, size: 35),
+      ),
     );
   }
-}
 
-BottomNavigationBarItem BuiltBottomNavigationBarItem({
-  required String iconName,
-  required String label,
-}) {
-  return BottomNavigationBarItem(icon: ImageIcon(AssetImage(iconName)), label: label);
+  BottomNavigationBarItem builtBottomNavigationBarItem({
+    required int index,
+    required String unselectedIcon,
+    required String selectedIcon,
+    required String label,
+  }) {
+    return BottomNavigationBarItem(
+      icon: ImageIcon(AssetImage(selectedIndex == index ? selectedIcon : unselectedIcon)),
+      label: label,
+    );
+  }
 }
