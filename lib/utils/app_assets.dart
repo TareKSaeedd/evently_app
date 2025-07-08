@@ -13,7 +13,9 @@ class AppAssets {
   static const iconMapSelected = 'assets/images/icon_map_selected.png';
   static const iconFavoriteSelected = 'assets/images/icon_favorite_selected.png';
   static const iconProfileSelected = 'assets/images/icon_profile_selected.png';
+  static const iconSun = 'assets/images/icon_sun.png';
   static const onboardingBody1 = 'assets/images/onboarding_body1.png';
   static const onboardingBody2 = 'assets/images/onboarding_body2.png';
   static const onboardingBody3 = 'assets/images/onboarding_body3.png';
+  static const birthdayImage = 'assets/images/birthday_img.png';
 }
