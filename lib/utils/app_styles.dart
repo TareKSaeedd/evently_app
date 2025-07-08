@@ -31,6 +31,17 @@ class AppStyles {
     fontWeight: FontWeight.bold,
     color: AppColors.whiteColor,
   );
+  static TextStyle bold14Regular = GoogleFonts.inter(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: AppColors.whiteColor,
+  );
+
+  static TextStyle bold14Medium = GoogleFonts.inter(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: AppColors.whiteColor,
+  );
 
   static TextStyle bold14Primary = GoogleFonts.inter(
     fontSize: 14,
@@ -66,6 +77,11 @@ class AppStyles {
     fontSize: 16,
     fontWeight: FontWeight.w500,
     color: AppColors.primaryLight,
+  );
+  static TextStyle medium16White = GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: AppColors.whiteColor,
   );
 
   static TextStyle bold20Primary = GoogleFonts.inter(
