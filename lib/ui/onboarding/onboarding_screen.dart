@@ -1,9 +1,11 @@
+import 'package:evently_app/providers/app_theme_provider.dart';
 import 'package:evently_app/ui/onboarding/onboarding_pageview_body.dart';
 import 'package:evently_app/utils/app_assets.dart';
 import 'package:evently_app/utils/app_colors.dart';
 import 'package:evently_app/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -36,10 +38,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     ];
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    var themeProvider = Provider.of<AppThemeProvider>(context);
     return Scaffold(
-      backgroundColor: AppColors.whiteBgColor,
+      backgroundColor:
+          themeProvider.appTheme == ThemeMode.light
+              ? AppColors.whiteBgColor
+              : AppColors.primaryDark,
       appBar: AppBar(
-        backgroundColor: AppColors.whiteBgColor,
+        backgroundColor:
+            themeProvider.appTheme == ThemeMode.light
+                ? AppColors.whiteBgColor
+                : AppColors.primaryDark,
         centerTitle: true,
         toolbarHeight: height * 0.11,
         title: Image.asset(AppAssets.onboardingTitle),
@@ -100,17 +109,29 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         margin: EdgeInsets.only(right: width * 0.01),
                         width: i == currentIndex ? 20 : 8,
                         height: 8,
-                        decoration: BoxDecoration(
-                          color: i == currentIndex ? AppColors.primaryLight : AppColors.blackColor,
-                          borderRadius: BorderRadius.circular(36),
-                        ),
+                        decoration:
+                            themeProvider.appTheme == ThemeMode.light
+                                ? BoxDecoration(
+                                  color:
+                                      i == currentIndex
+                                          ? AppColors.primaryLight
+                                          : AppColors.blackColor,
+                                  borderRadius: BorderRadius.circular(36),
+                                )
+                                : BoxDecoration(
+                                  color:
+                                      i == currentIndex
+                                          ? AppColors.primaryLight
+                                          : AppColors.whiteBgColor,
+                                  borderRadius: BorderRadius.circular(36),
+                                ),
                       ),
                   ],
                 ),
                 IconButton.outlined(
                   onPressed: () {
                     currentIndex == 2
-                        ? Navigator.pushReplacementNamed(context, AppRoutes.homeRouteName)
+                        ? Navigator.pushReplacementNamed(context, AppRoutes.loginScreen)
                         : pageController.nextPage(
                           duration: const Duration(milliseconds: 500),
                           curve: Curves.easeIn,

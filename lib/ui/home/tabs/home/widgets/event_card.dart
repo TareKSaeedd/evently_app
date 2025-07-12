@@ -1,7 +1,9 @@
+import 'package:evently_app/providers/app_theme_provider.dart';
 import 'package:evently_app/utils/app_assets.dart';
 import 'package:evently_app/utils/app_colors.dart';
 import 'package:evently_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class EventCard extends StatelessWidget {
   const EventCard({super.key});
@@ -10,6 +12,7 @@ class EventCard extends StatelessWidget {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    var themeProvider = Provider.of<AppThemeProvider>(context);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: width * 0.04),
       height: height * 0.24,
@@ -41,13 +44,22 @@ class EventCard extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: width * 0.02, vertical: height * 0.01),
             padding: EdgeInsets.symmetric(horizontal: width * 0.02, vertical: height * 0.01),
             decoration: BoxDecoration(
-              color: AppColors.whiteColor,
+              color:
+                  themeProvider.appTheme == ThemeMode.dark
+                      ? AppColors.primaryDark
+                      : AppColors.whiteColor,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('This is a Birthday Party', style: AppStyles.bold14Black),
+                Text(
+                  'This is a Birthday Party',
+                  style:
+                      themeProvider.appTheme == ThemeMode.dark
+                          ? AppStyles.bold14White
+                          : AppStyles.bold14Black,
+                ),
                 Image.asset(AppAssets.iconFavorite, color: AppColors.primaryLight),
               ],
             ),

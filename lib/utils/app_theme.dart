@@ -4,15 +4,20 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   static final ThemeData lightTheme = ThemeData(
-    appBarTheme: AppBarTheme(backgroundColor: AppColors.primaryLight),
+    appBarTheme: AppBarTheme(
+      backgroundColor: AppColors.primaryLight,
+      iconTheme: IconThemeData(color: AppColors.blackColor),
+    ),
     primaryColor: AppColors.primaryLight,
     scaffoldBackgroundColor: AppColors.whiteBgColor,
     primaryColorLight: AppColors.whiteColor,
     primaryColorDark: AppColors.transparentClolr,
     textTheme: TextTheme(
+      titleSmall: AppStyles.bold14Primary,
       headlineLarge: AppStyles.bold20Black,
       headlineMedium: AppStyles.medium16Primary,
-      headlineSmall: AppStyles.medium16White,
+      headlineSmall: AppStyles.medium16Black,
+      titleMedium: AppStyles.medium16Black,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColors.primaryLight,
@@ -32,16 +37,21 @@ class AppTheme {
   );
 
   static final ThemeData darkTheme = ThemeData(
-    appBarTheme: AppBarTheme(backgroundColor: AppColors.primaryDark),
+    appBarTheme: AppBarTheme(
+      backgroundColor: AppColors.primaryDark,
+      iconTheme: IconThemeData(color: AppColors.primaryLight),
+    ),
     primaryColor: AppColors.primaryDark,
     scaffoldBackgroundColor: AppColors.primaryDark,
     primaryColorLight: AppColors.primaryLight,
     primaryColorDark: AppColors.transparentClolr,
 
     textTheme: TextTheme(
+      titleSmall: AppStyles.bold14PrimaryDark,
       headlineLarge: AppStyles.bold20White,
       headlineMedium: AppStyles.medium16White,
       headlineSmall: AppStyles.medium16White,
+      titleMedium: AppStyles.medium16Primary,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColors.primaryDark,
