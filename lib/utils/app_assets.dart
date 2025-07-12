@@ -1,7 +1,8 @@
 class AppAssets {
   static const egFlag = 'assets/images/eg_flag.png';
-  static const logo = 'assets/images/logo.png';
+  static const logo = 'assets/images/Logo.png';
   static const onboardingBody = 'assets/images/onboarding_body.png';
+  static const onboardingDarkBody = 'assets/images/onboarding_body_dark.png';
   static const onboardingTitle = 'assets/images/onboarding_title.png';
   static const routeLogo = 'assets/images/route_logo.png';
   static const usaFlag = 'assets/images/usa_flag.png';
@@ -14,8 +15,31 @@ class AppAssets {
   static const iconFavoriteSelected = 'assets/images/icon_favorite_selected.png';
   static const iconProfileSelected = 'assets/images/icon_profile_selected.png';
   static const iconSun = 'assets/images/icon_sun.png';
+  static const iconEmail = 'assets/images/icon_email.png';
+  static const iconPassword = 'assets/images/icon_password.png';
+  static const iconUsername = 'assets/images/icon_username.png';
+  static const iconSearch = 'assets/images/icon_search.png';
+  static const iconShowPassword = 'assets/images/icon_show_password.png';
+  static const iconDarkTheme = 'assets/images/icon_dark_theme.png';
+  static const iconLightTheme = 'assets/images/icon_light_theme.png';
+  static const iconEvent = 'assets/images/icon_event.png';
+  static const iconCalendar = 'assets/images/icon_calendar.png';
+  static const iconTime = 'assets/images/icon_time.png';
+  static const iconLocation = 'assets/images/icon_location.png';
+  static const iconGoogle = 'assets/images/icon_google.png';
   static const onboardingBody1 = 'assets/images/onboarding_body1.png';
   static const onboardingBody2 = 'assets/images/onboarding_body2.png';
   static const onboardingBody3 = 'assets/images/onboarding_body3.png';
+  static const onboardingBodyDark2 = 'assets/images/onboarding_body_dark2.png';
+  static const onboardingBodyDark3 = 'assets/images/onboarding_body_dark3.png';
   static const birthdayImage = 'assets/images/birthday_img.png';
+
+  static const bookClubImage = 'assets/images/book_club_img.png';
+  static const eatingImage = 'assets/images/eating_img.png';
+  static const exhibtionImage = 'assets/images/exhibtion_img.png';
+  static const gamingImage = 'assets/images/gaming_img.png';
+  static const holidaydayImage = 'assets/images/holiday_img.png';
+  static const sportImage = 'assets/images/sport_img.png';
+  static const meetingImage = 'assets/images/meeting_img.png';
+  static const workShopImage = 'assets/images/work_shop_img.png';
 }

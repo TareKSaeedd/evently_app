@@ -62,7 +62,7 @@ class _HomeTabState extends State<HomeTab> {
                     color: AppColors.whiteColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Text('EN', style: AppStyles.bold14Primary),
+                  child: Text('EN', style: Theme.of(context).textTheme.titleSmall),
                 ),
               ],
             ),
