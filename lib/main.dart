@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently_app/firebase_options.dart';
 import 'package:evently_app/providers/app_language_provider.dart';
 import 'package:evently_app/providers/app_theme_provider.dart';
@@ -18,6 +19,7 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseFirestore.instance.disableNetwork();
   runApp(
     MultiProvider(
       providers: [
@@ -50,7 +52,7 @@ class _MyAppState extends State<MyApp> {
     var themeProvider = Provider.of<AppThemeProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.startingScreenName,
+      initialRoute: AppRoutes.homeRouteName,
       routes: {
         AppRoutes.startingScreenName: (context) => StartingScreen(),
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),
