@@ -5,23 +5,28 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AppBarTabs extends StatelessWidget {
-  AppBarTabs({
+  const AppBarTabs({
     super.key,
     required this.event,
     required this.index,
     required this.onTap,
     required this.selectedIndex,
+    this.isCreateEvent = false,
   });
-  String event;
-  int index;
-  int selectedIndex;
+  final String event;
+  final int index;
+  final int selectedIndex;
   final VoidCallback onTap;
+  final bool isCreateEvent;
+
+  bool get isSelected => index == selectedIndex;
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    var themeProvider = Provider.of<AppThemeProvider>(context);
+    final themeProvider = Provider.of<AppThemeProvider>(context);
+    final isLightTheme = themeProvider.appTheme == ThemeMode.light;
 
     return GestureDetector(
       onTap: onTap,
@@ -31,12 +36,53 @@ class AppBarTabs extends StatelessWidget {
         height: height * 0.047,
         width: width * 0.21,
         decoration: BoxDecoration(
-          border: Border.all(color: AppColors.whiteColor, width: 1.5),
-          color: index == selectedIndex ? AppColors.primaryLight : AppColors.primaryDark,
+          border: Border.all(color: _borderColor(isLightTheme)),
+          color: _backgroundColor(isLightTheme),
           borderRadius: BorderRadius.circular(46),
         ),
-        child: Text(event, style: AppStyles.medium16White),
+        child: Text(event, style: _textStyle(isLightTheme), textAlign: TextAlign.center),
       ),
     );
+  }
+
+  // Helpers to make logic more readable
+  Color _borderColor(bool isLightTheme) {
+    if (isCreateEvent) {
+      return AppColors.primaryLight;
+    } else {
+      return isLightTheme ? AppColors.whiteColor : AppColors.primaryLight;
+    }
+  }
+
+  Color _backgroundColor(bool isLightTheme) {
+    if (isCreateEvent) {
+      if (isLightTheme) {
+        return isSelected ? AppColors.primaryLight : AppColors.whiteBgColor;
+      } else {
+        return isSelected ? AppColors.primaryLight : AppColors.primaryDark;
+      }
+    } else {
+      if (isLightTheme) {
+        return isSelected ? AppColors.whiteBgColor : AppColors.primaryLight;
+      } else {
+        return isSelected ? AppColors.primaryLight : AppColors.primaryDark;
+      }
+    }
+  }
+
+  TextStyle _textStyle(bool isLightTheme) {
+    if (isCreateEvent) {
+      if (isLightTheme) {
+        return isSelected ? AppStyles.medium14White : AppStyles.medium14Primary;
+      } else {
+        return isSelected ? AppStyles.medium14PrimaryDark : AppStyles.medium14Primary;
+      }
+    } else {
+      if (isLightTheme) {
+        return isSelected ? AppStyles.medium14Primary : AppStyles.medium14White;
+      } else {
+        return AppStyles.medium14White;
+      }
+    }
   }
 }

@@ -54,5 +54,9 @@
     "choose_event_location": "اختر موقع الفعالية",
     "add_event": "إضافة فعالية",
     "choose_date": "اختر التاريخ",
-    "choose_time": "اختر الوقت"
+    "choose_time": "اختر الوقت",
+    "please_enter_the_title_of_the_event": "يرجى إدخال عنوان الفعالية",
+    "please_enter_the_description_of_the_event": "يرجى إدخال وصف الفعالية",
+    "please_enter_the_event_date": "يرجى إدخال تاريخ الفعالية",
+    "please_enter_the_event_time": "يرجى إدخال وقت الفعالية"
 }

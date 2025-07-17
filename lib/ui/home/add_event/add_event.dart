@@ -34,6 +34,9 @@ class _AddEventState extends State<AddEvent> {
   String selectedEventImage = '';
   String selectedEventName = '';
 
+  bool isSelectedDate = true;
+  bool isSelectedTime = true;
+
   @override
   Widget build(BuildContext context) {
     List<String> eventNamesList = [
@@ -68,7 +71,11 @@ class _AddEventState extends State<AddEvent> {
     var themeProvider = Provider.of<AppThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        iconTheme: IconThemeData(color: AppColors.primaryLight),
+        backgroundColor:
+            themeProvider.appTheme == ThemeMode.light
+                ? AppColors.whiteBgColor
+                : AppColors.primaryDark,
         title: Text(
           AppLocalizations.of(context)!.create_event,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.primaryLight),
@@ -101,6 +108,7 @@ class _AddEventState extends State<AddEvent> {
                     return Padding(
                       padding: EdgeInsets.only(right: width * 0.02, bottom: height * 0.01),
                       child: AppBarTabs(
+                        isCreateEvent: true,
                         event: eventNamesList[index],
                         index: index,
                         selectedIndex: selectedIndex,
@@ -122,7 +130,7 @@ class _AddEventState extends State<AddEvent> {
                   children: [
                     Text(
                       AppLocalizations.of(context)!.title,
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     SizedBox(height: height * 0.01),
                     CustomTextFormField(
@@ -142,7 +150,7 @@ class _AddEventState extends State<AddEvent> {
                               : AppColors.greyColor,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
-                          return 'Please enter the title of the event';
+                          return AppLocalizations.of(context)!.please_enter_the_title_of_the_event;
                         }
                         return null;
                       },
@@ -150,7 +158,7 @@ class _AddEventState extends State<AddEvent> {
                     SizedBox(height: height * 0.02),
                     Text(
                       AppLocalizations.of(context)!.description,
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     SizedBox(height: height * 0.01),
                     CustomTextFormField(
@@ -164,7 +172,9 @@ class _AddEventState extends State<AddEvent> {
                               : AppColors.greyColor,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
-                          return 'Please enter the description of the event';
+                          return AppLocalizations.of(
+                            context,
+                          )!.please_enter_the_description_of_the_event;
                         }
                         return null;
                       },
@@ -173,7 +183,7 @@ class _AddEventState extends State<AddEvent> {
                 ),
               ),
               SizedBox(height: height * 0.02),
-              EventDataAndTime(
+              EventDataOrTime(
                 onTap: () {
                   chooseData();
                 },
@@ -183,11 +193,13 @@ class _AddEventState extends State<AddEvent> {
                         : AppStyles.medium16Black,
                 imagePath: AppAssets.iconCalendar,
                 dateOrTime: AppLocalizations.of(context)!.event_date,
+                isSelectedDate: isSelectedDate,
+                validationDateOrTimeText: AppLocalizations.of(context)!.please_enter_the_event_date,
                 chooseDateOrTime:
                     selectedDate == null ? AppLocalizations.of(context)!.choose_date : formatedDate,
               ),
               SizedBox(height: height * .02),
-              EventDataAndTime(
+              EventDataOrTime(
                 onTap: () {
                   chooseTime();
                 },
@@ -197,11 +209,16 @@ class _AddEventState extends State<AddEvent> {
                         : AppStyles.medium16Black,
                 imagePath: AppAssets.iconTime,
                 dateOrTime: AppLocalizations.of(context)!.event_time,
+                isSelectedTime: isSelectedTime,
+                validationDateOrTimeText: AppLocalizations.of(context)!.please_enter_the_event_time,
                 chooseDateOrTime:
                     selectedTime == null ? AppLocalizations.of(context)!.choose_time : formatedTime,
               ),
               SizedBox(height: height * .02),
-              Text(AppLocalizations.of(context)!.location, style: AppStyles.medium16Black),
+              Text(
+                AppLocalizations.of(context)!.location,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               SizedBox(height: height * .01),
               CustomElevatedButton(
                 backgroundColor:
@@ -223,7 +240,10 @@ class _AddEventState extends State<AddEvent> {
                         ),
                         child: ImageIcon(
                           AssetImage(AppAssets.iconLocation),
-                          color: AppColors.whiteColor,
+                          color:
+                              themeProvider.appTheme == ThemeMode.light
+                                  ? AppColors.whiteColor
+                                  : AppColors.primaryDark,
                         ),
                       ),
                       SizedBox(width: width * 0.02),
@@ -240,6 +260,15 @@ class _AddEventState extends State<AddEvent> {
               SizedBox(height: height * 0.02),
               CustomElevatedButton(
                 onPressed: () {
+                  if (selectedDate == null) {
+                    // todo: show visible text to select date
+                    isSelectedDate = false;
+                  }
+                  if (selectedTime == null) {
+                    // todo: show visible text to select time
+                    isSelectedTime = false;
+                  }
+                  setState(() {});
                   addEvent();
                 },
                 buttonContent: Text(
@@ -264,6 +293,7 @@ class _AddEventState extends State<AddEvent> {
     selectedDate = chooseDate;
     if (selectedDate != null) {
       formatedDate = DateFormat('dd//MM/yyyy').format(selectedDate!);
+      isSelectedDate = true;
       setState(() {});
     }
   }
@@ -274,13 +304,18 @@ class _AddEventState extends State<AddEvent> {
     selectedTime = chooseTime;
 
     if (selectedTime != null) {
+      if (!mounted) return;
       formatedTime = selectedTime!.format(context);
+      isSelectedTime = true;
       setState(() {});
     }
   }
 
   void addEvent() {
     if (formKey.currentState!.validate() == true) {
+      if (selectedDate == null || selectedTime == null) {
+        return;
+      }
       // todo: Add event to firestore
       EventModel eventModel = EventModel(
         eventImage: selectedEventImage,
@@ -294,6 +329,20 @@ class _AddEventState extends State<AddEvent> {
         Duration(milliseconds: 500),
         onTimeout: () {
           print('Event Adeed successfully');
+          if (!mounted) return;
+          showDialog(
+            context: context,
+            builder:
+                (context) => AlertDialog(
+                  title: Text('Event Adeed successfully!', style: AppStyles.bold14Primarylight),
+                  actions: [
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Text('OK', style: AppStyles.bold14Primarylight),
+                    ),
+                  ],
+                ),
+          );
         },
       );
     }

@@ -4,23 +4,29 @@ import 'package:evently_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class EventDataAndTime extends StatelessWidget {
-  EventDataAndTime({
+class EventDataOrTime extends StatelessWidget {
+  EventDataOrTime({
     super.key,
     required this.imagePath,
     required this.dateOrTime,
     required this.chooseDateOrTime,
+    this.validationDateOrTimeText = '',
     this.dateOrTimeTextStyle,
     this.chooseDateOrTimeTextStyle,
     required this.onTap,
+    this.isSelectedDate = false,
+    this.isSelectedTime = false,
   });
 
   String imagePath;
   String dateOrTime;
   String chooseDateOrTime;
+  String validationDateOrTimeText;
   TextStyle? dateOrTimeTextStyle;
   TextStyle? chooseDateOrTimeTextStyle;
   VoidCallback onTap;
+  bool isSelectedDate;
+  bool isSelectedTime;
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +46,14 @@ class EventDataAndTime extends StatelessWidget {
         Spacer(),
         GestureDetector(
           onTap: onTap,
-          child: Text(
-            chooseDateOrTime,
-            style: chooseDateOrTimeTextStyle ?? AppStyles.medium16Primary,
+          child: Column(
+            children: [
+              Text(chooseDateOrTime, style: chooseDateOrTimeTextStyle ?? AppStyles.medium16Primary),
+              Visibility(
+                visible: (!isSelectedDate && !isSelectedTime),
+                child: Text(validationDateOrTimeText, style: AppStyles.bold14red),
+              ),
+            ],
           ),
         ),
       ],

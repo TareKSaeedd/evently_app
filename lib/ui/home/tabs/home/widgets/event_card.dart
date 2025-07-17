@@ -30,7 +30,10 @@ class EventCard extends StatelessWidget {
             margin: EdgeInsets.only(left: width * 0.02, top: height * 0.01),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: AppColors.whiteColor,
+              color:
+                  themeProvider.appTheme == ThemeMode.dark
+                      ? AppColors.primaryDark
+                      : AppColors.whiteColor,
             ),
             child: Column(
               children: [

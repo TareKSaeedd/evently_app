@@ -16,7 +16,7 @@ class AppTheme {
       titleSmall: AppStyles.bold14Primary,
       headlineLarge: AppStyles.bold20Black,
       headlineMedium: AppStyles.medium16Primary,
-      headlineSmall: AppStyles.medium16Black,
+      headlineSmall: AppStyles.medium16Grey,
       titleMedium: AppStyles.medium16Black,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -51,7 +51,7 @@ class AppTheme {
       headlineLarge: AppStyles.bold20White,
       headlineMedium: AppStyles.medium16White,
       headlineSmall: AppStyles.medium16White,
-      titleMedium: AppStyles.medium16Primary,
+      titleMedium: AppStyles.medium16White,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColors.primaryDark,

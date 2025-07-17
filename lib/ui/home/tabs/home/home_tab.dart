@@ -95,7 +95,7 @@ class _HomeTabState extends State<HomeTab> {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding: EdgeInsets.only(right: width * 0.02, bottom: height * 0.025),
+                        padding: EdgeInsets.only(right: width * 0.025, bottom: height * 0.01),
                         child: AppBarTabs(
                           event: tabs[index],
                           index: index,
