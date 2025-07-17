@@ -33,7 +33,7 @@ class FavoriteTab extends StatelessWidget {
             child: ListView.separated(
               padding: EdgeInsets.only(top: height * 0.02),
               itemBuilder: (context, index) {
-                return EventCard();
+                return Container();
               },
               separatorBuilder: (context, index) {
                 return SizedBox(height: height * 0.02);

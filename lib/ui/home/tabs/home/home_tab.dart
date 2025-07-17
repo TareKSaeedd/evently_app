@@ -1,3 +1,4 @@
+import 'package:evently_app/providers/event_list_provider.dart';
 import 'package:evently_app/ui/home/tabs/home/widgets/app_bar_tabs.dart';
 import 'package:evently_app/ui/home/tabs/home/widgets/event_card.dart';
 import 'package:evently_app/utils/app_assets.dart';
@@ -5,6 +6,7 @@ import 'package:evently_app/utils/app_colors.dart';
 import 'package:evently_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -32,6 +34,7 @@ class _HomeTabState extends State<HomeTab> {
     ];
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    var eventsListProvider = Provider.of<EventListProvider>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
@@ -117,12 +120,12 @@ class _HomeTabState extends State<HomeTab> {
             child: ListView.separated(
               padding: EdgeInsets.only(top: height * 0.02),
               itemBuilder: (context, index) {
-                return EventCard();
+                return EventCard(eventModel: eventsListProvider.eventsList[index]);
               },
               separatorBuilder: (context, index) {
                 return SizedBox(height: height * 0.02);
               },
-              itemCount: 20,
+              itemCount: eventsListProvider.eventsList.length,
             ),
           ),
         ],

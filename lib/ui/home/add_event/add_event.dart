@@ -1,5 +1,6 @@
 import 'package:evently_app/models/event_model.dart';
 import 'package:evently_app/providers/app_theme_provider.dart';
+import 'package:evently_app/providers/event_list_provider.dart';
 import 'package:evently_app/ui/home/add_event/widgets/event_data_and_time.dart';
 import 'package:evently_app/ui/home/tabs/home/widgets/app_bar_tabs.dart';
 import 'package:evently_app/ui/home/widgets/custom_elevated_button.dart';
@@ -8,6 +9,7 @@ import 'package:evently_app/utils/app_assets.dart';
 import 'package:evently_app/utils/app_colors.dart';
 import 'package:evently_app/utils/app_styles.dart';
 import 'package:evently_app/utils/firebase_utils.dart';
+import 'package:evently_app/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
@@ -30,12 +32,11 @@ class _AddEventState extends State<AddEvent> {
   TimeOfDay? selectedTime;
   String formatedDate = '';
   String formatedTime = '';
-
   String selectedEventImage = '';
   String selectedEventName = '';
-
   bool isSelectedDate = true;
   bool isSelectedTime = true;
+  late var eventsListProvider = Provider.of<EventListProvider>(context);
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +70,7 @@ class _AddEventState extends State<AddEvent> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var themeProvider = Provider.of<AppThemeProvider>(context);
+    eventsListProvider = Provider.of<EventListProvider>(context);
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: AppColors.primaryLight),
@@ -328,23 +330,30 @@ class _AddEventState extends State<AddEvent> {
       FirebaseUtils.addEventToFireStore(eventModel).timeout(
         Duration(milliseconds: 500),
         onTimeout: () {
-          print('Event Adeed successfully');
           if (!mounted) return;
-          showDialog(
-            context: context,
-            builder:
-                (context) => AlertDialog(
-                  title: Text('Event Adeed successfully!', style: AppStyles.bold14Primarylight),
-                  actions: [
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Text('OK', style: AppStyles.bold14Primarylight),
-                    ),
-                  ],
-                ),
+          ToastUtils.toastMsg(
+            msg: 'Event Adeed successfully',
+            backGroundColor: AppColors.greenColor,
+            textColor: AppColors.whiteColor,
           );
+          eventsListProvider.getAllEvents();
+          Navigator.pop(context);
         },
       );
     }
   }
 }
+
+// showDialog(
+//             context: context,
+//             builder:
+//                 (context) => AlertDialog(
+//                   title: Text('Event Adeed successfully!', style: AppStyles.bold14Primarylight),
+//                   actions: [
+//                     GestureDetector(
+//                       onTap: () => Navigator.pop(context),
+//                       child: Text('OK', style: AppStyles.bold14Primarylight),
+//                     ),
+//                   ],
+//                 ),
+//           );
