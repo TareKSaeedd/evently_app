@@ -4,16 +4,16 @@ import 'package:evently_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AppBarTabs extends StatelessWidget {
-  const AppBarTabs({
+class EventsCategory extends StatelessWidget {
+  const EventsCategory({
     super.key,
-    required this.event,
+    required this.eventName,
     required this.index,
     required this.onTap,
     required this.selectedIndex,
     this.isCreateEvent = false,
   });
-  final String event;
+  final String eventName;
   final int index;
   final int selectedIndex;
   final VoidCallback onTap;
@@ -40,7 +40,7 @@ class AppBarTabs extends StatelessWidget {
           color: _backgroundColor(isLightTheme),
           borderRadius: BorderRadius.circular(46),
         ),
-        child: Text(event, style: _textStyle(isLightTheme), textAlign: TextAlign.center),
+        child: Text(eventName, style: _textStyle(isLightTheme), textAlign: TextAlign.center),
       ),
     );
   }

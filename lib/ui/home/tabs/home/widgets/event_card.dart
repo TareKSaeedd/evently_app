@@ -40,7 +40,7 @@ class EventCard extends StatelessWidget {
             ),
             child: Column(
               children: [
-                Text(eventModel.eventDateTime.month.toString(), style: AppStyles.bold20Primary),
+                Text(eventModel.eventDateTime.day.toString(), style: AppStyles.bold20Primary),
                 Text(
                   DateFormat('MMM').format(eventModel.eventDateTime),
                   style: AppStyles.bold14Primary,

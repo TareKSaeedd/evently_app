@@ -2,11 +2,12 @@ import 'package:evently_app/models/event_model.dart';
 import 'package:evently_app/providers/app_theme_provider.dart';
 import 'package:evently_app/providers/event_list_provider.dart';
 import 'package:evently_app/ui/home/add_event/widgets/event_data_and_time.dart';
-import 'package:evently_app/ui/home/tabs/home/widgets/app_bar_tabs.dart';
+import 'package:evently_app/ui/home/tabs/home/widgets/events_category.dart';
 import 'package:evently_app/ui/home/widgets/custom_elevated_button.dart';
 import 'package:evently_app/ui/home/widgets/custom_text_form_field.dart';
 import 'package:evently_app/utils/app_assets.dart';
 import 'package:evently_app/utils/app_colors.dart';
+import 'package:evently_app/utils/app_routes.dart';
 import 'package:evently_app/utils/app_styles.dart';
 import 'package:evently_app/utils/firebase_utils.dart';
 import 'package:evently_app/utils/toast_utils.dart';
@@ -109,9 +110,9 @@ class _AddEventState extends State<AddEvent> {
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: EdgeInsets.only(right: width * 0.02, bottom: height * 0.01),
-                      child: AppBarTabs(
+                      child: EventsCategory(
                         isCreateEvent: true,
-                        event: eventNamesList[index],
+                        eventName: eventNamesList[index],
                         index: index,
                         selectedIndex: selectedIndex,
                         onTap: () {
@@ -331,29 +332,49 @@ class _AddEventState extends State<AddEvent> {
         Duration(milliseconds: 500),
         onTimeout: () {
           if (!mounted) return;
-          ToastUtils.toastMsg(
-            msg: 'Event Adeed successfully',
-            backGroundColor: AppColors.greenColor,
-            textColor: AppColors.whiteColor,
+          showDialog(
+            context: context,
+            builder:
+                (context) => AlertDialog(
+                  title: Text('Event Adeed successfully!', style: AppStyles.bold14Primarylight),
+                  actions: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.popUntil(context, ModalRoute.withName(AppRoutes.homeRouteName));
+                        eventsListProvider.getAllEvents();
+                      },
+                      child: Text('OK', style: AppStyles.bold14Primarylight),
+                    ),
+                  ],
+                ),
           );
-          eventsListProvider.getAllEvents();
-          Navigator.pop(context);
         },
       );
     }
   }
 }
 
-// showDialog(
-//             context: context,
-//             builder:
-//                 (context) => AlertDialog(
-//                   title: Text('Event Adeed successfully!', style: AppStyles.bold14Primarylight),
-//                   actions: [
-//                     GestureDetector(
-//                       onTap: () => Navigator.pop(context),
-//                       child: Text('OK', style: AppStyles.bold14Primarylight),
-//                     ),
-//                   ],
-//                 ),
-//           );
+
+/*
+
+
+showDialog(
+            context: context,
+            builder:
+                (context) => AlertDialog(
+                  title: Text('Event Adeed successfully!', style: AppStyles.bold14Primarylight),
+                  actions: [
+                    GestureDetector(
+                      onTap:
+                          () => Navigator.popUntil(
+                            context,
+                            ModalRoute.withName(AppRoutes.homeRouteName),
+                          ),
+                      child: Text('OK', style: AppStyles.bold14Primarylight),
+                    ),
+                  ],
+                ),
+          );
+
+
+*/
