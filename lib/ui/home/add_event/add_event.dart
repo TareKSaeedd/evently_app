@@ -353,28 +353,3 @@ class _AddEventState extends State<AddEvent> {
     }
   }
 }
-
-
-/*
-
-
-showDialog(
-            context: context,
-            builder:
-                (context) => AlertDialog(
-                  title: Text('Event Adeed successfully!', style: AppStyles.bold14Primarylight),
-                  actions: [
-                    GestureDetector(
-                      onTap:
-                          () => Navigator.popUntil(
-                            context,
-                            ModalRoute.withName(AppRoutes.homeRouteName),
-                          ),
-                      child: Text('OK', style: AppStyles.bold14Primarylight),
-                    ),
-                  ],
-                ),
-          );
-
-
-*/
