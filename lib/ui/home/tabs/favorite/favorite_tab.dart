@@ -1,3 +1,5 @@
+import 'package:evently_app/models/event_model.dart';
+import 'package:evently_app/providers/event_list_provider.dart';
 import 'package:evently_app/ui/home/tabs/home/widgets/event_card.dart';
 import 'package:evently_app/ui/home/widgets/custom_text_form_field.dart';
 import 'package:evently_app/utils/app_assets.dart';
@@ -5,15 +7,31 @@ import 'package:evently_app/utils/app_colors.dart';
 import 'package:evently_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
-class FavoriteTab extends StatelessWidget {
-  FavoriteTab({super.key});
+class FavoriteTab extends StatefulWidget {
+  const FavoriteTab({super.key});
+
+  @override
+  State<FavoriteTab> createState() => _FavoriteTabState();
+}
+
+class _FavoriteTabState extends State<FavoriteTab> {
   TextEditingController searchController = TextEditingController();
+  late EventListProvider eventListProvider;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => eventListProvider.getAllFavoriteEvents());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    EventModel eventModel;
+    eventListProvider = Provider.of<EventListProvider>(context);
     return SafeArea(
       child: Column(
         children: [
@@ -30,16 +48,24 @@ class FavoriteTab extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: ListView.separated(
-              padding: EdgeInsets.only(top: height * 0.02),
-              itemBuilder: (context, index) {
-                return Container();
-              },
-              separatorBuilder: (context, index) {
-                return SizedBox(height: height * 0.02);
-              },
-              itemCount: 20,
-            ),
+            child:
+                eventListProvider.favoriteEventList.isEmpty
+                    ? Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.no_events_added_to_favorites_yet,
+                        style: AppStyles.semi20Black,
+                      ),
+                    )
+                    : ListView.separated(
+                      padding: EdgeInsets.only(top: height * 0.02),
+                      itemBuilder: (context, index) {
+                        return EventCard(eventModel: eventListProvider.favoriteEventList[index]);
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(height: height * 0.02);
+                      },
+                      itemCount: eventListProvider.favoriteEventList.length,
+                    ),
           ),
         ],
       ),

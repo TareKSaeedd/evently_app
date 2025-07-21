@@ -58,5 +58,7 @@
     "please_enter_the_title_of_the_event": "يرجى إدخال عنوان الفعالية",
     "please_enter_the_description_of_the_event": "يرجى إدخال وصف الفعالية",
     "please_enter_the_event_date": "يرجى إدخال تاريخ الفعالية",
-    "please_enter_the_event_time": "يرجى إدخال وقت الفعالية"
+    "please_enter_the_event_time": "يرجى إدخال وقت الفعالية",
+    "event_updated_successfully": "تم تعديل الفعالية في المفضلة بنجاح",
+    "no_events_added_to_favorites_yet": "لم يتم إضافة اي فعاليات إلى المفضلة"
 }
