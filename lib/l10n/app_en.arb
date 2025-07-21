@@ -55,5 +55,11 @@
     "choose_event_location": "Choose Event Location",
     "add_event": "Add Event",
     "choose_date": "Choose Date",
-    "choose_time": "Choose Time"
+    "choose_time": "Choose Time",
+    "please_enter_the_title_of_the_event": "Pleas enter the title of the event",
+    "please_enter_the_description_of_the_event": "please enter the description of the event",
+    "please_enter_the_event_date": "please enter the event date",
+    "please_enter_the_event_time": "please enter the event time",
+    "event_updated_successfully": "Event updated successfully",
+    "no_events_added_to_favorites_yet": "No events added to favorites yet"
 }

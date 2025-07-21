@@ -1,25 +1,30 @@
+import 'package:evently_app/models/event_model.dart';
 import 'package:evently_app/providers/app_theme_provider.dart';
+import 'package:evently_app/providers/event_list_provider.dart';
 import 'package:evently_app/utils/app_assets.dart';
 import 'package:evently_app/utils/app_colors.dart';
 import 'package:evently_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class EventCard extends StatelessWidget {
-  const EventCard({super.key});
+  EventCard({super.key, required this.eventModel});
+  EventModel eventModel;
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var themeProvider = Provider.of<AppThemeProvider>(context);
+    var eventListProvider = Provider.of<EventListProvider>(context);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: width * 0.04),
       height: height * 0.24,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.primaryLight, width: 2),
-        image: DecorationImage(image: AssetImage(AppAssets.birthdayImage), fit: BoxFit.fill),
+        image: DecorationImage(image: AssetImage(eventModel.eventImage), fit: BoxFit.fill),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,12 +35,18 @@ class EventCard extends StatelessWidget {
             margin: EdgeInsets.only(left: width * 0.02, top: height * 0.01),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: AppColors.whiteColor,
+              color:
+                  themeProvider.appTheme == ThemeMode.dark
+                      ? AppColors.primaryDark
+                      : AppColors.whiteColor,
             ),
             child: Column(
               children: [
-                Text('21', style: AppStyles.bold20Primary),
-                Text('Nov', style: AppStyles.bold14Primary),
+                Text(eventModel.eventDateTime.day.toString(), style: AppStyles.bold20Primary),
+                Text(
+                  DateFormat('MMM').format(eventModel.eventDateTime),
+                  style: AppStyles.bold14Primary,
+                ),
               ],
             ),
           ),
@@ -54,13 +65,24 @@ class EventCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'This is a Birthday Party',
+                  eventModel.eventitle,
                   style:
                       themeProvider.appTheme == ThemeMode.dark
                           ? AppStyles.bold14White
                           : AppStyles.bold14Black,
                 ),
-                Image.asset(AppAssets.iconFavorite, color: AppColors.primaryLight),
+                GestureDetector(
+                  onTap: () {
+                    eventListProvider.updateListFavorite(eventModel, context);
+                  },
+                  child:
+                      eventModel.isFavorite == true
+                          ? Image.asset(
+                            AppAssets.iconFavoriteSelected,
+                            color: AppColors.primaryLight,
+                          )
+                          : Image.asset(AppAssets.iconFavorite, color: AppColors.primaryLight),
+                ),
               ],
             ),
           ),

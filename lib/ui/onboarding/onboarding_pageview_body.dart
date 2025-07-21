@@ -27,31 +27,33 @@ class OnboardingPageviewBody extends StatelessWidget {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var themeProvider = Provider.of<AppThemeProvider>(context);
-    return Column(
-      children: [
-        SizedBox(height: height * 0.05),
-        Image.asset(
-          themeProvider.appTheme == ThemeMode.light ? imagePath : darkModeImagePath[index],
-        ),
-        SizedBox(height: height * 0.046),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: width * 0.04),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: AppStyles.bold20Primary),
-              SizedBox(height: height * 0.046),
-              Text(
-                description,
-                style:
-                    themeProvider.appTheme == ThemeMode.light
-                        ? AppStyles.medium16Black
-                        : AppStyles.medium16White,
-              ),
-            ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(height: height * 0.05),
+          Image.asset(
+            themeProvider.appTheme == ThemeMode.light ? imagePath : darkModeImagePath[index],
           ),
-        ),
-      ],
+          SizedBox(height: height * 0.046),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: width * 0.04),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: AppStyles.bold20Primary),
+                SizedBox(height: height * 0.046),
+                Text(
+                  description,
+                  style:
+                      themeProvider.appTheme == ThemeMode.light
+                          ? AppStyles.medium16Black
+                          : AppStyles.medium16White,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

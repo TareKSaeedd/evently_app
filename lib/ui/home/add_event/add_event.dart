@@ -1,11 +1,16 @@
+import 'package:evently_app/models/event_model.dart';
 import 'package:evently_app/providers/app_theme_provider.dart';
+import 'package:evently_app/providers/event_list_provider.dart';
 import 'package:evently_app/ui/home/add_event/widgets/event_data_and_time.dart';
-import 'package:evently_app/ui/home/tabs/home/widgets/app_bar_tabs.dart';
+import 'package:evently_app/ui/home/tabs/home/widgets/events_category.dart';
 import 'package:evently_app/ui/home/widgets/custom_elevated_button.dart';
 import 'package:evently_app/ui/home/widgets/custom_text_form_field.dart';
 import 'package:evently_app/utils/app_assets.dart';
 import 'package:evently_app/utils/app_colors.dart';
+import 'package:evently_app/utils/app_routes.dart';
 import 'package:evently_app/utils/app_styles.dart';
+import 'package:evently_app/utils/firebase_utils.dart';
+import 'package:evently_app/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
@@ -20,7 +25,7 @@ class AddEvent extends StatefulWidget {
 
 class _AddEventState extends State<AddEvent> {
   int selectedIndex = 0;
-  TextEditingController eventController = TextEditingController();
+  TextEditingController evenTitletController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
   var formKey = GlobalKey<FormState>();
@@ -28,10 +33,15 @@ class _AddEventState extends State<AddEvent> {
   TimeOfDay? selectedTime;
   String formatedDate = '';
   String formatedTime = '';
+  String selectedEventImage = '';
+  String selectedEventName = '';
+  bool isSelectedDate = true;
+  bool isSelectedTime = true;
+  late var eventsListProvider = Provider.of<EventListProvider>(context);
 
   @override
   Widget build(BuildContext context) {
-    List<String> tabs = [
+    List<String> eventNamesList = [
       AppLocalizations.of(context)!.sport,
       AppLocalizations.of(context)!.birthday,
       AppLocalizations.of(context)!.meeting,
@@ -42,7 +52,8 @@ class _AddEventState extends State<AddEvent> {
       AppLocalizations.of(context)!.holiday,
       AppLocalizations.of(context)!.eating,
     ];
-    List<String> imagePath = [
+
+    List<String> eventImagesList = [
       AppAssets.sportImage,
       AppAssets.birthdayImage,
       AppAssets.meetingImage,
@@ -54,12 +65,20 @@ class _AddEventState extends State<AddEvent> {
       AppAssets.eatingImage,
     ];
 
+    selectedEventName = eventNamesList[selectedIndex];
+    selectedEventImage = eventImagesList[selectedIndex];
+
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var themeProvider = Provider.of<AppThemeProvider>(context);
+    eventsListProvider = Provider.of<EventListProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        iconTheme: IconThemeData(color: AppColors.primaryLight),
+        backgroundColor:
+            themeProvider.appTheme == ThemeMode.light
+                ? AppColors.whiteBgColor
+                : AppColors.primaryDark,
         title: Text(
           AppLocalizations.of(context)!.create_event,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(color: AppColors.primaryLight),
@@ -80,7 +99,7 @@ class _AddEventState extends State<AddEvent> {
               Container(
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
-                child: Image.asset(imagePath[selectedIndex]),
+                child: Image.asset(eventImagesList[selectedIndex]),
               ),
               SizedBox(height: height * .02),
               SizedBox(
@@ -91,8 +110,9 @@ class _AddEventState extends State<AddEvent> {
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: EdgeInsets.only(right: width * 0.02, bottom: height * 0.01),
-                      child: AppBarTabs(
-                        event: tabs[index],
+                      child: EventsCategory(
+                        isCreateEvent: true,
+                        eventName: eventNamesList[index],
                         index: index,
                         selectedIndex: selectedIndex,
                         onTap: () {
@@ -102,7 +122,7 @@ class _AddEventState extends State<AddEvent> {
                       ),
                     );
                   },
-                  itemCount: tabs.length,
+                  itemCount: eventNamesList.length,
                 ),
               ),
               SizedBox(height: height * 0.02),
@@ -113,11 +133,11 @@ class _AddEventState extends State<AddEvent> {
                   children: [
                     Text(
                       AppLocalizations.of(context)!.title,
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     SizedBox(height: height * 0.01),
                     CustomTextFormField(
-                      controller: eventController,
+                      controller: evenTitletController,
                       prefixIcon: Image.asset(
                         AppAssets.iconEvent,
                         color:
@@ -133,7 +153,7 @@ class _AddEventState extends State<AddEvent> {
                               : AppColors.greyColor,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
-                          return 'Please enter the title of the event';
+                          return AppLocalizations.of(context)!.please_enter_the_title_of_the_event;
                         }
                         return null;
                       },
@@ -141,7 +161,7 @@ class _AddEventState extends State<AddEvent> {
                     SizedBox(height: height * 0.02),
                     Text(
                       AppLocalizations.of(context)!.description,
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     SizedBox(height: height * 0.01),
                     CustomTextFormField(
@@ -155,7 +175,9 @@ class _AddEventState extends State<AddEvent> {
                               : AppColors.greyColor,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
-                          return 'Please enter the description of the event';
+                          return AppLocalizations.of(
+                            context,
+                          )!.please_enter_the_description_of_the_event;
                         }
                         return null;
                       },
@@ -164,7 +186,7 @@ class _AddEventState extends State<AddEvent> {
                 ),
               ),
               SizedBox(height: height * 0.02),
-              EventDataAndTime(
+              EventDataOrTime(
                 onTap: () {
                   chooseData();
                 },
@@ -174,11 +196,13 @@ class _AddEventState extends State<AddEvent> {
                         : AppStyles.medium16Black,
                 imagePath: AppAssets.iconCalendar,
                 dateOrTime: AppLocalizations.of(context)!.event_date,
+                isSelectedDate: isSelectedDate,
+                validationDateOrTimeText: AppLocalizations.of(context)!.please_enter_the_event_date,
                 chooseDateOrTime:
                     selectedDate == null ? AppLocalizations.of(context)!.choose_date : formatedDate,
               ),
               SizedBox(height: height * .02),
-              EventDataAndTime(
+              EventDataOrTime(
                 onTap: () {
                   chooseTime();
                 },
@@ -188,11 +212,16 @@ class _AddEventState extends State<AddEvent> {
                         : AppStyles.medium16Black,
                 imagePath: AppAssets.iconTime,
                 dateOrTime: AppLocalizations.of(context)!.event_time,
+                isSelectedTime: isSelectedTime,
+                validationDateOrTimeText: AppLocalizations.of(context)!.please_enter_the_event_time,
                 chooseDateOrTime:
                     selectedTime == null ? AppLocalizations.of(context)!.choose_time : formatedTime,
               ),
               SizedBox(height: height * .02),
-              Text(AppLocalizations.of(context)!.location, style: AppStyles.medium16Black),
+              Text(
+                AppLocalizations.of(context)!.location,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               SizedBox(height: height * .01),
               CustomElevatedButton(
                 backgroundColor:
@@ -214,7 +243,10 @@ class _AddEventState extends State<AddEvent> {
                         ),
                         child: ImageIcon(
                           AssetImage(AppAssets.iconLocation),
-                          color: AppColors.whiteColor,
+                          color:
+                              themeProvider.appTheme == ThemeMode.light
+                                  ? AppColors.whiteColor
+                                  : AppColors.primaryDark,
                         ),
                       ),
                       SizedBox(width: width * 0.02),
@@ -231,6 +263,15 @@ class _AddEventState extends State<AddEvent> {
               SizedBox(height: height * 0.02),
               CustomElevatedButton(
                 onPressed: () {
+                  if (selectedDate == null) {
+                    // todo: show visible text to select date
+                    isSelectedDate = false;
+                  }
+                  if (selectedTime == null) {
+                    // todo: show visible text to select time
+                    isSelectedTime = false;
+                  }
+                  setState(() {});
                   addEvent();
                 },
                 buttonContent: Text(
@@ -255,6 +296,7 @@ class _AddEventState extends State<AddEvent> {
     selectedDate = chooseDate;
     if (selectedDate != null) {
       formatedDate = DateFormat('dd//MM/yyyy').format(selectedDate!);
+      isSelectedDate = true;
       setState(() {});
     }
   }
@@ -265,14 +307,49 @@ class _AddEventState extends State<AddEvent> {
     selectedTime = chooseTime;
 
     if (selectedTime != null) {
+      if (!mounted) return;
       formatedTime = selectedTime!.format(context);
+      isSelectedTime = true;
       setState(() {});
     }
   }
 
   void addEvent() {
     if (formKey.currentState!.validate() == true) {
+      if (selectedDate == null || selectedTime == null) {
+        return;
+      }
       // todo: Add event to firestore
+      EventModel eventModel = EventModel(
+        eventImage: selectedEventImage,
+        eventName: selectedEventName,
+        eventitle: evenTitletController.text,
+        eventDescription: descriptionController.text,
+        eventDateTime: selectedDate!,
+        eventTime: formatedTime,
+      );
+      FirebaseUtils.addEventToFireStore(eventModel).timeout(
+        Duration(milliseconds: 500),
+        onTimeout: () {
+          if (!mounted) return;
+          showDialog(
+            context: context,
+            builder:
+                (context) => AlertDialog(
+                  title: Text('Event Adeed successfully!', style: AppStyles.bold14Primarylight),
+                  actions: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.popUntil(context, ModalRoute.withName(AppRoutes.homeRouteName));
+                        eventsListProvider.getAllEvents();
+                      },
+                      child: Text('OK', style: AppStyles.bold14Primarylight),
+                    ),
+                  ],
+                ),
+          );
+        },
+      );
     }
   }
 }

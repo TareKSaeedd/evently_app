@@ -1,10 +1,12 @@
-import 'package:evently_app/ui/home/tabs/home/widgets/app_bar_tabs.dart';
+import 'package:evently_app/providers/event_list_provider.dart';
+import 'package:evently_app/ui/home/tabs/home/widgets/events_category.dart';
 import 'package:evently_app/ui/home/tabs/home/widgets/event_card.dart';
 import 'package:evently_app/utils/app_assets.dart';
 import 'package:evently_app/utils/app_colors.dart';
 import 'package:evently_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -14,24 +16,15 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  int selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
-    List<String> tabs = [
-      AppLocalizations.of(context)!.all,
-      AppLocalizations.of(context)!.sport,
-      AppLocalizations.of(context)!.birthday,
-      AppLocalizations.of(context)!.meeting,
-      AppLocalizations.of(context)!.gaming,
-      AppLocalizations.of(context)!.workshop,
-      AppLocalizations.of(context)!.bookclub,
-      AppLocalizations.of(context)!.exhibition,
-      AppLocalizations.of(context)!.holiday,
-      AppLocalizations.of(context)!.eating,
-    ];
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    var eventsListProvider = Provider.of<EventListProvider>(context);
+    eventsListProvider.getEventNameList(context);
+    if (eventsListProvider.eventsList.isEmpty) {
+      eventsListProvider.getAllEvents();
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
@@ -95,35 +88,37 @@ class _HomeTabState extends State<HomeTab> {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding: EdgeInsets.only(right: width * 0.02, bottom: height * 0.025),
-                        child: AppBarTabs(
-                          event: tabs[index],
+                        padding: EdgeInsets.only(right: width * 0.025, bottom: height * 0.01),
+                        child: EventsCategory(
+                          eventName: eventsListProvider.eventsNameList[index],
                           index: index,
-                          selectedIndex: selectedIndex,
+                          selectedIndex: eventsListProvider.selectedIndex,
                           onTap: () {
-                            selectedIndex = index;
-                            setState(() {});
+                            eventsListProvider.changeSelectedIndex(index);
                           },
                         ),
                       );
                     },
-                    itemCount: tabs.length,
+                    itemCount: eventsListProvider.eventsNameList.length,
                   ),
                 ),
               ],
             ),
           ),
           Expanded(
-            child: ListView.separated(
-              padding: EdgeInsets.only(top: height * 0.02),
-              itemBuilder: (context, index) {
-                return EventCard();
-              },
-              separatorBuilder: (context, index) {
-                return SizedBox(height: height * 0.02);
-              },
-              itemCount: 20,
-            ),
+            child:
+                eventsListProvider.filterEventList.isEmpty
+                    ? Center(child: Text('No events added yet.', style: AppStyles.bold20Primary))
+                    : ListView.separated(
+                      padding: EdgeInsets.only(top: height * 0.02),
+                      itemBuilder: (context, index) {
+                        return EventCard(eventModel: eventsListProvider.filterEventList[index]);
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(height: height * 0.02);
+                      },
+                      itemCount: eventsListProvider.filterEventList.length,
+                    ),
           ),
         ],
       ),
