@@ -336,7 +336,10 @@ class _AddEventState extends State<AddEvent> {
             context: context,
             builder:
                 (context) => AlertDialog(
-                  title: Text('Event Adeed successfully!', style: AppStyles.bold14Primarylight),
+                  title: Text(
+                    AppLocalizations.of(context)!.event_added_successfully,
+                    style: AppStyles.bold14Primarylight,
+                  ),
                   actions: [
                     GestureDetector(
                       onTap: () {
