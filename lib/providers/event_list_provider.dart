@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently_app/models/event_model.dart';
+import 'package:evently_app/utils/app_assets.dart';
 import 'package:evently_app/utils/app_colors.dart';
 import 'package:evently_app/utils/firebase_utils.dart';
 import 'package:evently_app/utils/toast_utils.dart';
@@ -11,7 +12,22 @@ class EventListProvider extends ChangeNotifier {
   List<EventModel> filterEventList = [];
   List<EventModel> favoriteEventList = [];
   List<String> eventsNameList = [];
+  List<String> eventImagePathList = [];
   int selectedIndex = 0;
+
+  List<String> getImagePathList(BuildContext context) {
+    return eventImagePathList = [
+      AppAssets.sportImage,
+      AppAssets.birthdayImage,
+      AppAssets.meetingImage,
+      AppAssets.gamingImage,
+      AppAssets.workShopImage,
+      AppAssets.bookClubImage,
+      AppAssets.exhibtionImage,
+      AppAssets.holidaydayImage,
+      AppAssets.eatingImage,
+    ];
+  }
 
   List<String> getEventNameList(BuildContext context) {
     return eventsNameList = [
@@ -43,8 +59,13 @@ class EventListProvider extends ChangeNotifier {
     var quersySnapShot = await FirebaseUtils.getEventCollection().get();
     eventsList = quersySnapShot.docs.map((doc) => doc.data()).toList();
 
+    //todo: Bug fix: events are not filtered after changing the app language.
+    // create eventImagePathList and compare it with eventImage in where method (instead of eventName).
+
     filterEventList =
-        eventsList.where((event) => event.eventName == eventsNameList[selectedIndex]).toList();
+        eventsList
+            .where((event) => event.eventImage == eventImagePathList[selectedIndex - 1])
+            .toList();
 
     filterEventList.sort((event1, event2) {
       return event1.eventDateTime.compareTo(event2.eventDateTime);
@@ -99,6 +120,19 @@ class EventListProvider extends ChangeNotifier {
           return event.isFavorite == true;
         }).toList();
 
+    notifyListeners();
+  }
+
+  void getAllFavoriteEventListFromFireStore() async {
+    var querySnapshot =
+        await FirebaseUtils.getEventCollection()
+            .orderBy('event_date_time')
+            .where('is_favorite', isEqualTo: true)
+            .get();
+    favoriteEventList =
+        querySnapshot.docs.map((event) {
+          return event.data();
+        }).toList();
     notifyListeners();
   }
 }

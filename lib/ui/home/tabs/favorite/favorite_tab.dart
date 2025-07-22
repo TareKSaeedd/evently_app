@@ -22,7 +22,10 @@ class _FavoriteTabState extends State<FavoriteTab> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) => eventListProvider.getAllFavoriteEvents());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      eventListProvider.getAllFavoriteEvents();
+      // eventListProvider.getAllFavoriteEventListFromFireStore();
+    });
     super.initState();
   }
 
@@ -30,7 +33,6 @@ class _FavoriteTabState extends State<FavoriteTab> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    EventModel eventModel;
     eventListProvider = Provider.of<EventListProvider>(context);
     return SafeArea(
       child: Column(
