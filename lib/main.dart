@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
     var themeProvider = Provider.of<AppThemeProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.homeRouteName,
+      initialRoute: AppRoutes.loginScreen,
       routes: {
         AppRoutes.startingScreenName: (context) => StartingScreen(),
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),
