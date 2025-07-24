@@ -89,6 +89,7 @@ class EventListProvider extends ChangeNotifier {
   }
 
   void updateListFavorite(EventModel eventModel, BuildContext context) {
+    final updatedMsg = AppLocalizations.of(context)!.event_updated_successfully;
     FirebaseUtils.getEventCollection()
         .doc(eventModel.id)
         .update({'is_favorite': !eventModel.isFavorite})
@@ -96,7 +97,7 @@ class EventListProvider extends ChangeNotifier {
           Duration(milliseconds: 500),
           onTimeout: () {
             ToastUtils.toastMsg(
-              msg: AppLocalizations.of(context)!.event_updated_successfully,
+              msg: updatedMsg,
               backGroundColor: AppColors.greenColor,
               textColor: AppColors.blackColor,
             );
