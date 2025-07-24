@@ -22,6 +22,7 @@ class _HomeTabState extends State<HomeTab> {
     var width = MediaQuery.of(context).size.width;
     var eventsListProvider = Provider.of<EventListProvider>(context);
     eventsListProvider.getEventNameList(context);
+    eventsListProvider.getImagePathList(context);
     if (eventsListProvider.eventsList.isEmpty) {
       eventsListProvider.getAllEvents();
     }

@@ -3,8 +3,11 @@ import 'package:evently_app/ui/home/widgets/custom_elevated_button.dart';
 import 'package:evently_app/ui/home/widgets/custom_text_form_field.dart';
 import 'package:evently_app/utils/app_assets.dart';
 import 'package:evently_app/utils/app_colors.dart';
+import 'package:evently_app/utils/app_routes.dart';
 import 'package:evently_app/utils/app_styles.dart';
+import 'package:evently_app/utils/dialog_utils.dart';
 import 'package:evently_app/widgets/language_switch.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -226,9 +229,57 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void createAccount() {
+  void createAccount() async {
     if (formKey.currentState!.validate()) {
-      Navigator.pop(context);
+      DialogUtils.showLoading(context: context, loadingText: 'Loading...');
+      try {
+        final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        DialogUtils.hideLoading(context: context);
+        print('user created successfully\n');
+        print(credential.user?.uid);
+        DialogUtils.showMessage(
+          context: context,
+          contentMsg: 'user created succesfully!',
+          posActionName: 'OK',
+          posActionFunction:
+              () => Navigator.of(
+                context,
+              ).pushNamedAndRemoveUntil(AppRoutes.homeRouteName, (route) => false),
+        );
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          print('The password provided is too weak.');
+        } else if (e.code == 'email-already-in-use') {
+          print('The account already exists for that email.');
+          DialogUtils.showMessage(
+            context: context,
+            contentMsg: 'This account already exists for that email.',
+            posActionName: 'OK',
+            title: 'Warning',
+            contentStyle: AppStyles.medium16Red,
+            posActionFunction: () {
+              Navigator.pop(context);
+            },
+          );
+        } else if (e.code == 'network-request-failed') {
+          print('No internet connection');
+          DialogUtils.showMessage(
+            context: context,
+            contentMsg: 'No internet connection.',
+            posActionName: 'OK',
+            title: 'Warning',
+            contentStyle: AppStyles.medium16Red,
+            posActionFunction: () {
+              Navigator.pop(context);
+            },
+          );
+        }
+      } catch (e) {
+        print(e);
+      }
     }
   }
 }
