@@ -1,9 +1,11 @@
 import 'package:evently_app/providers/app_language_provider.dart';
 import 'package:evently_app/providers/app_theme_provider.dart';
+import 'package:evently_app/providers/user_provider.dart';
 import 'package:evently_app/ui/home/tabs/profile/language/language_bottom_sheet.dart';
 import 'package:evently_app/ui/home/tabs/profile/theme/theme_bottom_sheet.dart';
 import 'package:evently_app/utils/app_assets.dart';
 import 'package:evently_app/utils/app_colors.dart';
+import 'package:evently_app/utils/app_routes.dart';
 import 'package:evently_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -21,6 +23,7 @@ class _ProfileTabState extends State<ProfileTab> {
   Widget build(BuildContext context) {
     var languageProvider = Provider.of<AppLanguageProvider>(context);
     var themeProvider = Provider.of<AppThemeProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -38,9 +41,9 @@ class _ProfileTabState extends State<ProfileTab> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Route Academy', style: AppStyles.bold24White),
+                Text(userProvider.currentUSer!.name, style: AppStyles.bold24White),
                 SizedBox(height: height * 0.01),
-                Text('RouteAcademy@gmail.com', style: AppStyles.bold16White),
+                Text(userProvider.currentUSer!.email, style: AppStyles.bold16White),
               ],
             ),
           ],
@@ -111,18 +114,24 @@ class _ProfileTabState extends State<ProfileTab> {
                 ),
               ),
               SizedBox(height: height * 0.315),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: height * 0.019, horizontal: width * 0.04),
-                decoration: BoxDecoration(
-                  color: AppColors.redColor,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.logout, color: AppColors.whiteColor),
-                    SizedBox(width: width * 0.02),
-                    Text(AppLocalizations.of(context)!.logout, style: AppStyles.bold20White),
-                  ],
+              GestureDetector(
+                onTap:
+                    () => Navigator.of(
+                      context,
+                    ).pushNamedAndRemoveUntil(AppRoutes.loginScreen, (route) => false),
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: height * 0.019, horizontal: width * 0.04),
+                  decoration: BoxDecoration(
+                    color: AppColors.redColor,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.logout, color: AppColors.whiteColor),
+                      SizedBox(width: width * 0.02),
+                      Text(AppLocalizations.of(context)!.logout, style: AppStyles.bold20White),
+                    ],
+                  ),
                 ),
               ),
             ],

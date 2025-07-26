@@ -44,8 +44,8 @@ class EventListProvider extends ChangeNotifier {
     ];
   }
 
-  void getAllEvents() async {
-    QuerySnapshot<EventModel> querySnapshot = await FirebaseUtils.getEventCollection().get();
+  void getAllEvents(String uId) async {
+    QuerySnapshot<EventModel> querySnapshot = await FirebaseUtils.getEventCollection(uId).get();
     eventsList =
         querySnapshot.docs.map((doc) {
           return doc.data();
@@ -55,8 +55,8 @@ class EventListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getFilterEvents() async {
-    var quersySnapShot = await FirebaseUtils.getEventCollection().get();
+  void getFilterEvents(String uId) async {
+    var quersySnapShot = await FirebaseUtils.getEventCollection(uId).get();
     eventsList = quersySnapShot.docs.map((doc) => doc.data()).toList();
 
     //todo: Bug fix: events are not filtered after changing the app language.
@@ -73,9 +73,10 @@ class EventListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getFilterEventsFromFireStore() async {
+  void getFilterEventsFromFireStore(String uId) async {
     var querySnapShot =
-        await FirebaseUtils.getEventCollection()
+        await FirebaseUtils.getEventCollection(uId)
+            .orderBy('event_date_time')
             .where('event_name', isEqualTo: eventsNameList[selectedIndex])
             .get();
 
@@ -83,16 +84,26 @@ class EventListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeSelectedIndex(int newSelectedIndex) {
+  void changeSelectedIndex(int newSelectedIndex, String uId) {
     selectedIndex = newSelectedIndex;
-    selectedIndex == 0 ? getAllEvents() : getFilterEvents();
+    selectedIndex == 0 ? getAllEvents(uId) : getFilterEventsFromFireStore(uId);
   }
 
-  void updateListFavorite(EventModel eventModel, BuildContext context) {
+  void updateListFavorite(EventModel eventModel, BuildContext context, String uId) {
     final updatedMsg = AppLocalizations.of(context)!.event_updated_successfully;
-    FirebaseUtils.getEventCollection()
+    FirebaseUtils.getEventCollection(uId)
         .doc(eventModel.id)
         .update({'is_favorite': !eventModel.isFavorite})
+        // todo: using .then method because we are working online
+        .then((value) {
+          ToastUtils.toastMsg(
+            msg: updatedMsg,
+            backGroundColor: AppColors.greenColor,
+            textColor: AppColors.blackColor,
+          );
+          selectedIndex == 0 ? getAllEvents(uId) : getFilterEvents(uId);
+          getAllFavoriteEventListFromFireStore(uId);
+        })
         .timeout(
           Duration(milliseconds: 500),
           onTimeout: () {
@@ -103,13 +114,13 @@ class EventListProvider extends ChangeNotifier {
             );
           },
         );
-    selectedIndex == 0 ? getAllEvents() : getFilterEvents();
-    getAllFavoriteEvents();
+    selectedIndex == 0 ? getAllEvents(uId) : getFilterEvents(uId);
+    getAllFavoriteEventListFromFireStore(uId);
     notifyListeners();
   }
 
-  void getAllFavoriteEvents() async {
-    var querySnapshot = await FirebaseUtils.getEventCollection().get();
+  void getAllFavoriteEvents(String uId) async {
+    var querySnapshot = await FirebaseUtils.getEventCollection(uId).get();
 
     favoriteEventList =
         querySnapshot.docs.map((doc) {
@@ -124,12 +135,11 @@ class EventListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getAllFavoriteEventListFromFireStore() async {
+  void getAllFavoriteEventListFromFireStore(String uId) async {
     var querySnapshot =
-        await FirebaseUtils.getEventCollection()
-            .orderBy('event_date_time')
-            .where('is_favorite', isEqualTo: true)
-            .get();
+        await FirebaseUtils.getEventCollection(
+          uId,
+        ).orderBy('event_date_time').where('is_favorite', isEqualTo: true).get();
     favoriteEventList =
         querySnapshot.docs.map((event) {
           return event.data();

@@ -1,6 +1,7 @@
 import 'package:evently_app/models/event_model.dart';
 import 'package:evently_app/providers/app_theme_provider.dart';
 import 'package:evently_app/providers/event_list_provider.dart';
+import 'package:evently_app/providers/user_provider.dart';
 import 'package:evently_app/utils/app_assets.dart';
 import 'package:evently_app/utils/app_colors.dart';
 import 'package:evently_app/utils/app_styles.dart';
@@ -18,6 +19,7 @@ class EventCard extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
     var themeProvider = Provider.of<AppThemeProvider>(context);
     var eventListProvider = Provider.of<EventListProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: width * 0.04),
       height: height * 0.24,
@@ -73,7 +75,11 @@ class EventCard extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    eventListProvider.updateListFavorite(eventModel, context);
+                    eventListProvider.updateListFavorite(
+                      eventModel,
+                      context,
+                      userProvider.currentUSer!.id,
+                    );
                   },
                   child:
                       eventModel.isFavorite == true

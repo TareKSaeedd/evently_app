@@ -1,4 +1,5 @@
 import 'package:evently_app/providers/event_list_provider.dart';
+import 'package:evently_app/providers/user_provider.dart';
 import 'package:evently_app/ui/home/tabs/home/widgets/events_category.dart';
 import 'package:evently_app/ui/home/tabs/home/widgets/event_card.dart';
 import 'package:evently_app/utils/app_assets.dart';
@@ -21,10 +22,11 @@ class _HomeTabState extends State<HomeTab> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var eventsListProvider = Provider.of<EventListProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
     eventsListProvider.getEventNameList(context);
     eventsListProvider.getImagePathList(context);
     if (eventsListProvider.eventsList.isEmpty) {
-      eventsListProvider.getAllEvents();
+      eventsListProvider.getAllEvents(userProvider.currentUSer!.id);
     }
     return Scaffold(
       appBar: AppBar(
@@ -36,7 +38,7 @@ class _HomeTabState extends State<HomeTab> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(AppLocalizations.of(context)!.welcome_back, style: AppStyles.bold14Regular),
-                Text("Route Academy", style: AppStyles.bold24White),
+                Text(userProvider.currentUSer!.name, style: AppStyles.bold24White),
               ],
             ),
             Spacer(),
@@ -95,7 +97,10 @@ class _HomeTabState extends State<HomeTab> {
                           index: index,
                           selectedIndex: eventsListProvider.selectedIndex,
                           onTap: () {
-                            eventsListProvider.changeSelectedIndex(index);
+                            eventsListProvider.changeSelectedIndex(
+                              index,
+                              userProvider.currentUSer!.id,
+                            );
                           },
                         ),
                       );

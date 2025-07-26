@@ -1,6 +1,7 @@
 import 'package:evently_app/models/event_model.dart';
 import 'package:evently_app/providers/app_theme_provider.dart';
 import 'package:evently_app/providers/event_list_provider.dart';
+import 'package:evently_app/providers/user_provider.dart';
 import 'package:evently_app/ui/home/add_event/widgets/event_data_and_time.dart';
 import 'package:evently_app/ui/home/tabs/home/widgets/events_category.dart';
 import 'package:evently_app/ui/home/widgets/custom_elevated_button.dart';
@@ -10,7 +11,6 @@ import 'package:evently_app/utils/app_colors.dart';
 import 'package:evently_app/utils/app_routes.dart';
 import 'package:evently_app/utils/app_styles.dart';
 import 'package:evently_app/utils/firebase_utils.dart';
-import 'package:evently_app/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
@@ -328,31 +328,57 @@ class _AddEventState extends State<AddEvent> {
         eventDateTime: selectedDate!,
         eventTime: formatedTime,
       );
-      FirebaseUtils.addEventToFireStore(eventModel).timeout(
-        Duration(milliseconds: 500),
-        onTimeout: () {
-          if (!mounted) return;
-          showDialog(
-            context: context,
-            builder:
-                (context) => AlertDialog(
-                  title: Text(
-                    AppLocalizations.of(context)!.event_added_successfully,
-                    style: AppStyles.bold14Primarylight,
-                  ),
-                  actions: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.popUntil(context, ModalRoute.withName(AppRoutes.homeRouteName));
-                        eventsListProvider.getAllEvents();
-                      },
-                      child: Text('OK', style: AppStyles.bold14Primarylight),
+      var userProvider = Provider.of<UserProvider>(context, listen: false);
+      FirebaseUtils.addEventToFireStore(eventModel, userProvider.currentUSer!.id)
+          .then((value) {
+            showDialog(
+              context: context,
+              builder:
+                  (context) => AlertDialog(
+                    title: Text(
+                      AppLocalizations.of(context)!.event_added_successfully,
+                      style: AppStyles.bold14Primarylight,
                     ),
-                  ],
-                ),
+                    actions: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.popUntil(context, ModalRoute.withName(AppRoutes.homeRouteName));
+                          eventsListProvider.getAllEvents(userProvider.currentUSer!.id);
+                        },
+                        child: Text('OK', style: AppStyles.bold14Primarylight),
+                      ),
+                    ],
+                  ),
+            );
+          })
+          .timeout(
+            Duration(milliseconds: 500),
+            onTimeout: () {
+              if (!mounted) return;
+              showDialog(
+                context: context,
+                builder:
+                    (context) => AlertDialog(
+                      title: Text(
+                        AppLocalizations.of(context)!.event_added_successfully,
+                        style: AppStyles.bold14Primarylight,
+                      ),
+                      actions: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.popUntil(
+                              context,
+                              ModalRoute.withName(AppRoutes.homeRouteName),
+                            );
+                            eventsListProvider.getAllEvents(userProvider.currentUSer!.id);
+                          },
+                          child: Text('OK', style: AppStyles.bold14Primarylight),
+                        ),
+                      ],
+                    ),
+              );
+            },
           );
-        },
-      );
     }
   }
 }
