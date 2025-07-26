@@ -1,4 +1,6 @@
 import 'package:evently_app/providers/app_theme_provider.dart';
+import 'package:evently_app/providers/event_list_provider.dart';
+import 'package:evently_app/providers/user_provider.dart';
 import 'package:evently_app/ui/home/widgets/custom_elevated_button.dart';
 import 'package:evently_app/ui/home/widgets/custom_text_form_field.dart';
 import 'package:evently_app/utils/app_assets.dart';
@@ -6,6 +8,7 @@ import 'package:evently_app/utils/app_colors.dart';
 import 'package:evently_app/utils/app_routes.dart';
 import 'package:evently_app/utils/app_styles.dart';
 import 'package:evently_app/utils/dialog_utils.dart';
+import 'package:evently_app/utils/firebase_utils.dart';
 import 'package:evently_app/widgets/language_switch.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -228,6 +231,20 @@ class _LoginScreenState extends State<LoginScreen> {
           email: emailController.text,
           password: passwordController.text,
         );
+
+        var newUser = await FirebaseUtils.readUserFromFireStore(credential.user?.uid ?? '');
+
+        if (newUser == null) {
+          return;
+        }
+
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
+        var eventListProvider = Provider.of<EventListProvider>(context, listen: false);
+        userProvider.updateUser(newUser);
+        eventListProvider.changeSelectedIndex(0, newUser.id);
+
+        eventListProvider.getAllFavoriteEvents(newUser.id);
+
         DialogUtils.hideLoading(context: context);
         DialogUtils.showMessage(
           context: context,

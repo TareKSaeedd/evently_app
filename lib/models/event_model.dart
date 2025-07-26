@@ -7,6 +7,7 @@ class EventModel {
   DateTime eventDateTime;
   String eventTime;
   bool isFavorite;
+  static const collectionName = 'Event';
 
   EventModel({
     this.id = '',
