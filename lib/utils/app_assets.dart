@@ -42,4 +42,6 @@ class AppAssets {
   static const sportImage = 'assets/images/sport_img.png';
   static const meetingImage = 'assets/images/meeting_img.png';
   static const workShopImage = 'assets/images/work_shop_img.png';
+  static const iconDelete = 'assets/images/icon_delete.png';
+  static const iconEdit = 'assets/images/icon_edit.png';
 }

@@ -118,7 +118,7 @@ class _ProfileTabState extends State<ProfileTab> {
                 onTap:
                     () => Navigator.of(
                       context,
-                    ).pushNamedAndRemoveUntil(AppRoutes.loginScreen, (route) => false),
+                    ).pushNamedAndRemoveUntil(AppRoutes.loginScreenRouteName, (route) => false),
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: height * 0.019, horizontal: width * 0.04),
                   decoration: BoxDecoration(

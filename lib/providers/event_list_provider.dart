@@ -146,4 +146,15 @@ class EventListProvider extends ChangeNotifier {
         }).toList();
     notifyListeners();
   }
+
+  void deleteEventFromFireStore({required String uId, required EventModel event}) async {
+    await FirebaseUtils.getEventCollection(uId).doc(event.id).delete().then((value) {
+      ToastUtils.toastMsg(
+        msg: 'Event deleted successfully!',
+        backGroundColor: AppColors.greenColor,
+        textColor: AppColors.blackColor,
+      );
+    });
+    getAllEvents(uId);
+  }
 }

@@ -6,6 +6,7 @@ import 'package:evently_app/providers/user_provider.dart';
 import 'package:evently_app/ui/auth/login/login_screen.dart';
 import 'package:evently_app/ui/auth/register/register_screen.dart';
 import 'package:evently_app/ui/home/add_event/add_event.dart';
+import 'package:evently_app/ui/home/edit_event/edit_event.dart';
 import 'package:evently_app/ui/home/home_screen.dart';
 import 'package:evently_app/ui/onboarding/onboarding_screen.dart';
 import 'package:evently_app/ui/onboarding/starting_screen.dart';
@@ -55,14 +56,15 @@ class _MyAppState extends State<MyApp> {
     var themeProvider = Provider.of<AppThemeProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.loginScreen,
+      initialRoute: AppRoutes.loginScreenRouteName,
       routes: {
-        AppRoutes.startingScreenName: (context) => StartingScreen(),
+        AppRoutes.startingScreenRouteName: (context) => StartingScreen(),
         AppRoutes.onboardingRouteName: (context) => OnboardingScreen(),
         AppRoutes.homeRouteName: (context) => HomeScreen(),
-        AppRoutes.loginScreen: (context) => LoginScreen(),
-        AppRoutes.registerScreen: (context) => RegisterScreen(),
-        AppRoutes.addEvent: (context) => AddEvent(),
+        AppRoutes.loginScreenRouteName: (context) => LoginScreen(),
+        AppRoutes.registerScreenRouteName: (context) => RegisterScreen(),
+        AppRoutes.addEventScreenRouteName: (context) => AddEvent(),
+        AppRoutes.editEvenstScreenRouteName: (context) => EditEventScreen(),
       },
       locale: Locale(languageProvider.languaege),
       localizationsDelegates: AppLocalizations.localizationsDelegates,

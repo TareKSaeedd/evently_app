@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         elevation: 0,
         onPressed: () {
-          Navigator.pushNamed(context, AppRoutes.addEvent);
+          Navigator.pushNamed(context, AppRoutes.addEventScreenRouteName);
         },
         child: Icon(Icons.add, color: AppColors.whiteColor, size: 35),
       ),
