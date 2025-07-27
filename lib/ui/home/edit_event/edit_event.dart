@@ -50,6 +50,7 @@ class EditEventScreen extends StatelessWidget {
                   event: eventModelArgs,
                   uId: userProvider.currentUSer!.id,
                 );
+                eventListProvider.changeSelectedIndex(0, userProvider.currentUSer!.id);
                 Navigator.of(context).pop();
               },
               child: Image.asset(AppAssets.iconDelete),
