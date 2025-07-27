@@ -295,7 +295,7 @@ class _AddEventState extends State<AddEvent> {
     );
     selectedDate = chooseDate;
     if (selectedDate != null) {
-      formatedDate = DateFormat('dd//MM/yyyy').format(selectedDate!);
+      formatedDate = DateFormat('yMMMMd').format(selectedDate!);
       isSelectedDate = true;
       setState(() {});
     }
@@ -342,6 +342,7 @@ class _AddEventState extends State<AddEvent> {
                     actions: [
                       GestureDetector(
                         onTap: () {
+                          eventsListProvider.changeSelectedIndex(0, userProvider.currentUSer!.id);
                           Navigator.popUntil(context, ModalRoute.withName(AppRoutes.homeRouteName));
                           eventsListProvider.getAllEvents(userProvider.currentUSer!.id);
                         },

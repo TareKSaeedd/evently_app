@@ -131,7 +131,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 IconButton.outlined(
                   onPressed: () {
                     currentIndex == 2
-                        ? Navigator.pushReplacementNamed(context, AppRoutes.loginScreen)
+                        ? Navigator.pushReplacementNamed(context, AppRoutes.loginScreenRouteName)
                         : pageController.nextPage(
                           duration: const Duration(milliseconds: 500),
                           curve: Curves.easeIn,

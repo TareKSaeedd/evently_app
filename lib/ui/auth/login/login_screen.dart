@@ -147,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, AppRoutes.registerScreen);
+                            Navigator.pushNamed(context, AppRoutes.registerScreenRouteName);
                           },
                           child: Text(
                             AppLocalizations.of(context)!.create_account,
