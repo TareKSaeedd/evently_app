@@ -5,6 +5,7 @@ import 'package:evently_app/providers/user_provider.dart';
 import 'package:evently_app/ui/home/widgets/custom_elevated_button.dart';
 import 'package:evently_app/utils/app_assets.dart';
 import 'package:evently_app/utils/app_colors.dart';
+import 'package:evently_app/utils/app_routes.dart';
 import 'package:evently_app/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -51,7 +52,9 @@ class EditEventScreen extends StatelessWidget {
                   uId: userProvider.currentUSer!.id,
                 );
                 eventListProvider.changeSelectedIndex(0, userProvider.currentUSer!.id);
-                Navigator.of(context).pop();
+                Navigator.of(
+                  context,
+                ).pushNamedAndRemoveUntil(AppRoutes.homeRouteName, (route) => false);
               },
               child: Image.asset(AppAssets.iconDelete),
             ),
