@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class EventModel {
   String id;
   String eventImage;
@@ -28,7 +30,10 @@ class EventModel {
         eventitle: data['event_title'],
         eventDescription: data['event_description'],
         eventTime: data['event_time'],
-        eventDateTime: DateTime.fromMillisecondsSinceEpoch(data['event_date_time']),
+        eventDateTime:
+            data['event_date_time'] is Timestamp
+                ? (data['event_date_time'] as Timestamp).toDate()
+                : DateTime.fromMillisecondsSinceEpoch(data['event_date_time']),
         isFavorite: data['is_favorite'],
       );
 
@@ -40,7 +45,7 @@ class EventModel {
       'event_title': eventitle,
       'event_description': eventDescription,
       'event_time': eventTime,
-      'event_date_time': eventDateTime.millisecondsSinceEpoch,
+      'event_date_time': eventDateTime,
       'is_favorite': isFavorite,
     };
   }

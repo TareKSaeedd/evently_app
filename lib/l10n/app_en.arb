@@ -62,5 +62,8 @@
     "please_enter_the_event_time": "please enter the event time",
     "event_updated_successfully": "Event updated successfully",
     "no_events_added_to_favorites_yet": "No events added to favorites yet",
-    "event_added_successfully": "Event Adeed successfully!"
+    "event_added_successfully": "Event Adeed successfully!",
+    "edit_event": "Edit Event",
+    "event_details": "Event Details",
+    "update_event": "Update Event"
 }

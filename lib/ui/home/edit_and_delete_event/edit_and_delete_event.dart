@@ -11,8 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class EditEventScreen extends StatelessWidget {
-  const EditEventScreen({super.key});
+class EditAndDeleteEvent extends StatelessWidget {
+  const EditAndDeleteEvent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,10 @@ class EditEventScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: width * 0.02),
             child: InkWell(
               onTap: () {
-                // todo: call a function to edit an event
+                // todo: Navigate to edit an event screen
+                Navigator.of(
+                  context,
+                ).pushNamed(AppRoutes.editEventsScreenRouteName, arguments: eventModelArgs);
               },
               child: Image.asset(AppAssets.iconEdit),
             ),

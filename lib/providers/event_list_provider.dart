@@ -89,6 +89,30 @@ class EventListProvider extends ChangeNotifier {
     selectedIndex == 0 ? getAllEvents(uId) : getFilterEventsFromFireStore(uId);
   }
 
+  void updateEventFromFireStore(EventModel eventModel, BuildContext context, String uId) async {
+    final updatedMsg = AppLocalizations.of(context)!.event_updated_successfully;
+    await FirebaseUtils.getEventCollection(uId)
+        .doc(eventModel.id)
+        .update({
+          'event_image': eventModel.eventImage,
+          'event_name': eventModel.eventName,
+          'event_title': eventModel.eventitle,
+          'event_description': eventModel.eventDescription,
+          'event_time': eventModel.eventTime,
+          'event_date_time': eventModel.eventDateTime,
+        })
+        .then((value) {
+          getAllEvents(uId);
+          ToastUtils.toastMsg(
+            msg: updatedMsg,
+            backGroundColor: AppColors.greenColor,
+            textColor: AppColors.blackColor,
+          );
+        });
+
+    notifyListeners();
+  }
+
   void updateListFavorite(EventModel eventModel, BuildContext context, String uId) {
     final updatedMsg = AppLocalizations.of(context)!.event_updated_successfully;
     FirebaseUtils.getEventCollection(uId)

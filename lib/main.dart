@@ -6,7 +6,8 @@ import 'package:evently_app/providers/user_provider.dart';
 import 'package:evently_app/ui/auth/login/login_screen.dart';
 import 'package:evently_app/ui/auth/register/register_screen.dart';
 import 'package:evently_app/ui/home/add_event/add_event.dart';
-import 'package:evently_app/ui/home/edit_event/edit_event.dart';
+import 'package:evently_app/ui/home/edit_and_delete_event/edit_and_delete_event.dart';
+import 'package:evently_app/ui/home/edit_and_delete_event/edit_event_screen.dart';
 import 'package:evently_app/ui/home/home_screen.dart';
 import 'package:evently_app/ui/onboarding/onboarding_screen.dart';
 import 'package:evently_app/ui/onboarding/starting_screen.dart';
@@ -64,7 +65,8 @@ class _MyAppState extends State<MyApp> {
         AppRoutes.loginScreenRouteName: (context) => LoginScreen(),
         AppRoutes.registerScreenRouteName: (context) => RegisterScreen(),
         AppRoutes.addEventScreenRouteName: (context) => AddEvent(),
-        AppRoutes.editEvenstScreenRouteName: (context) => EditEventScreen(),
+        AppRoutes.editAndDeleteEvenstScreenRouteName: (context) => EditAndDeleteEvent(),
+        AppRoutes.editEventsScreenRouteName: (context) => EditEventScreen(),
       },
       locale: Locale(languageProvider.languaege),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
