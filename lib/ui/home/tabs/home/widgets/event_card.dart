@@ -23,7 +23,9 @@ class EventCard extends StatelessWidget {
     var userProvider = Provider.of<UserProvider>(context);
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed(AppRoutes.editEvenstScreenRouteName, arguments: eventModel);
+        Navigator.of(
+          context,
+        ).pushNamed(AppRoutes.editAndDeleteEvenstScreenRouteName, arguments: eventModel);
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: width * 0.04),

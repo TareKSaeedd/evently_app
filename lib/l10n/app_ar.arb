@@ -61,5 +61,8 @@
     "please_enter_the_event_time": "يرجى إدخال وقت الفعالية",
     "event_updated_successfully": "تم تعديل الفعالية في المفضلة بنجاح",
     "no_events_added_to_favorites_yet": "لم يتم إضافة اي فعاليات إلى المفضلة",
-    "event_added_successfully": "تم اضافة الفاعلية بنجاح"
+    "event_added_successfully": "تم اضافة الفاعلية بنجاح",
+    "edit_event": "تعديل الفعالية",
+    "event_details": "تفاصيل الفعالية",
+    "update_event": "تحديث الفعالية"
 }

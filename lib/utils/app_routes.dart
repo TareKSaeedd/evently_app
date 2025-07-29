@@ -5,5 +5,6 @@ class AppRoutes {
   static const loginScreenRouteName = 'login_screen';
   static const registerScreenRouteName = 'register_screen';
   static const addEventScreenRouteName = 'add_event';
-  static const editEvenstScreenRouteName = 'edit_event';
+  static const editAndDeleteEvenstScreenRouteName = 'edit_and_delete_event';
+  static const editEventsScreenRouteName = 'edit_screen';
 }
