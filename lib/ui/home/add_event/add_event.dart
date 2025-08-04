@@ -329,33 +329,9 @@ class _AddEventState extends State<AddEvent> {
         eventTime: formatedTime,
       );
       var userProvider = Provider.of<UserProvider>(context, listen: false);
-      FirebaseUtils.addEventToFireStore(eventModel, userProvider.currentUSer!.id)
-          .then((value) {
-            showDialog(
-              context: context,
-              builder:
-                  (context) => AlertDialog(
-                    title: Text(
-                      AppLocalizations.of(context)!.event_added_successfully,
-                      style: AppStyles.bold14Primarylight,
-                    ),
-                    actions: [
-                      GestureDetector(
-                        onTap: () {
-                          eventsListProvider.changeSelectedIndex(0, userProvider.currentUSer!.id);
-                          Navigator.popUntil(context, ModalRoute.withName(AppRoutes.homeRouteName));
-                          eventsListProvider.getAllEvents(userProvider.currentUSer!.id);
-                        },
-                        child: Text('OK', style: AppStyles.bold14Primarylight),
-                      ),
-                    ],
-                  ),
-            );
-          })
-          .timeout(
-            Duration(milliseconds: 500),
-            onTimeout: () {
-              if (!mounted) return;
+      if (userProvider.currentUSer != null) {
+        FirebaseUtils.addEventToFireStore(eventModel, userProvider.currentUSer!.id)
+            .then((value) {
               showDialog(
                 context: context,
                 builder:
@@ -367,6 +343,7 @@ class _AddEventState extends State<AddEvent> {
                       actions: [
                         GestureDetector(
                           onTap: () {
+                            eventsListProvider.changeSelectedIndex(0, userProvider.currentUSer!.id);
                             Navigator.popUntil(
                               context,
                               ModalRoute.withName(AppRoutes.homeRouteName),
@@ -378,8 +355,94 @@ class _AddEventState extends State<AddEvent> {
                       ],
                     ),
               );
-            },
-          );
+            })
+            .timeout(
+              Duration(milliseconds: 500),
+              onTimeout: () {
+                if (!mounted) return;
+                showDialog(
+                  context: context,
+                  builder:
+                      (context) => AlertDialog(
+                        title: Text(
+                          AppLocalizations.of(context)!.event_added_successfully,
+                          style: AppStyles.bold14Primarylight,
+                        ),
+                        actions: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.popUntil(
+                                context,
+                                ModalRoute.withName(AppRoutes.homeRouteName),
+                              );
+                              eventsListProvider.getAllEvents(userProvider.currentUSer!.id);
+                            },
+                            child: Text('OK', style: AppStyles.bold14Primarylight),
+                          ),
+                        ],
+                      ),
+                );
+              },
+            );
+      } else if (userProvider.currentUSer == null) {
+        FirebaseUtils.addEventToFireStore(eventModel, userProvider.googleUser!.user!.uid)
+            .then((value) {
+              showDialog(
+                context: context,
+                builder:
+                    (context) => AlertDialog(
+                      title: Text(
+                        AppLocalizations.of(context)!.event_added_successfully,
+                        style: AppStyles.bold14Primarylight,
+                      ),
+                      actions: [
+                        GestureDetector(
+                          onTap: () {
+                            eventsListProvider.changeSelectedIndex(
+                              0,
+                              userProvider.googleUser!.user!.uid,
+                            );
+                            Navigator.popUntil(
+                              context,
+                              ModalRoute.withName(AppRoutes.homeRouteName),
+                            );
+                            eventsListProvider.getAllEvents(userProvider.googleUser!.user!.uid);
+                          },
+                          child: Text('OK', style: AppStyles.bold14Primarylight),
+                        ),
+                      ],
+                    ),
+              );
+            })
+            .timeout(
+              Duration(milliseconds: 500),
+              onTimeout: () {
+                if (!mounted) return;
+                showDialog(
+                  context: context,
+                  builder:
+                      (context) => AlertDialog(
+                        title: Text(
+                          AppLocalizations.of(context)!.event_added_successfully,
+                          style: AppStyles.bold14Primarylight,
+                        ),
+                        actions: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.popUntil(
+                                context,
+                                ModalRoute.withName(AppRoutes.homeRouteName),
+                              );
+                              eventsListProvider.getAllEvents(userProvider.googleUser!.user!.uid);
+                            },
+                            child: Text('OK', style: AppStyles.bold14Primarylight),
+                          ),
+                        ],
+                      ),
+                );
+              },
+            );
+      }
     }
   }
 }

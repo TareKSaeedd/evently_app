@@ -41,9 +41,19 @@ class _ProfileTabState extends State<ProfileTab> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(userProvider.currentUSer!.name, style: AppStyles.bold24White),
+                Text(
+                  userProvider.currentUSer != null
+                      ? userProvider.currentUSer!.name
+                      : userProvider.googleUser!.user!.displayName.toString(),
+                  style: AppStyles.bold24White,
+                ),
                 SizedBox(height: height * 0.01),
-                Text(userProvider.currentUSer!.email, style: AppStyles.bold16White),
+                Text(
+                  userProvider.currentUSer != null
+                      ? userProvider.currentUSer!.email
+                      : userProvider.googleUser!.user!.email.toString(),
+                  style: AppStyles.bold14White,
+                ),
               ],
             ),
           ],

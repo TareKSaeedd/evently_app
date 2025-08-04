@@ -13,6 +13,7 @@ import 'package:evently_app/widgets/language_switch.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -33,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var themeProvider = Provider.of<AppThemeProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -195,8 +197,22 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ],
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         // todo: go to google login
+                        userProvider.currentUSer = null;
+                        final userCredential = await loginWithGoogle();
+                        if (userCredential != null) {
+                          userProvider.updateGoogleUser(userCredential);
+
+                          DialogUtils.showMessage(
+                            context: context,
+                            contentMsg: 'logged in with google successfully',
+                            posActionName: 'OK',
+                            posActionFunction: () {
+                              Navigator.of(context).popAndPushNamed(AppRoutes.homeRouteName);
+                            },
+                          );
+                        }
                       },
                       textStyle: AppStyles.medium20Primary,
                       backgroundColor:
@@ -281,6 +297,31 @@ class _LoginScreenState extends State<LoginScreen> {
           print(e);
         }
       }
+    }
+  }
+
+  Future<UserCredential?> loginWithGoogle() async {
+    DialogUtils.showLoading(context: context, loadingText: 'Loading...');
+    var userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.currentUSer = null;
+    try {
+      final GoogleSignInAccount? googleuser = await GoogleSignIn().signIn();
+      if (googleuser == null) {
+        return null;
+      }
+      final GoogleSignInAuthentication googleAuth = await googleuser.authentication;
+      final accessToken = googleAuth.accessToken;
+      final idToken = googleAuth.idToken;
+
+      if (accessToken == null || idToken == null) {
+        return null;
+      }
+
+      final credential = GoogleAuthProvider.credential(accessToken: accessToken, idToken: idToken);
+      DialogUtils.hideLoading(context: context);
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      return null;
     }
   }
 }

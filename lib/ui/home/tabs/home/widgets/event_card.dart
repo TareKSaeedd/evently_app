@@ -85,7 +85,9 @@ class EventCard extends StatelessWidget {
                       eventListProvider.updateListFavorite(
                         eventModel,
                         context,
-                        userProvider.currentUSer!.id,
+                        userProvider.currentUSer != null
+                            ? userProvider.currentUSer!.id
+                            : userProvider.googleUser!.user!.uid,
                       );
                     },
                     child:

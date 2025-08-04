@@ -36,6 +36,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
   String selectedEventName = '';
   bool isSelectedDate = true;
   bool isSelectedTime = true;
+  bool isImageSelected = true;
   late var eventsListProvider = Provider.of<EventListProvider>(context, listen: false);
   late var userProvider = Provider.of<UserProvider>(context, listen: false);
   late EventModel eventModelArgs;
@@ -72,6 +73,8 @@ class _EditEventScreenState extends State<EditEventScreen> {
     var width = MediaQuery.of(context).size.width;
     var themeProvider = Provider.of<AppThemeProvider>(context);
     eventModelArgs = ModalRoute.of(context)?.settings.arguments as EventModel;
+    evenTitletController.text = eventModelArgs.eventitle;
+    descriptionController.text = eventModelArgs.eventDescription;
 
     return Scaffold(
       appBar: AppBar(
@@ -100,7 +103,10 @@ class _EditEventScreenState extends State<EditEventScreen> {
               Container(
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
-                child: Image.asset(eventImagesList[selectedIndex]),
+                child:
+                    isImageSelected == true
+                        ? Image.asset(eventModelArgs.eventImage)
+                        : Image.asset(eventImagesList[selectedIndex]),
               ),
               SizedBox(height: height * .02),
               SizedBox(
@@ -115,8 +121,12 @@ class _EditEventScreenState extends State<EditEventScreen> {
                         isCreateEvent: true,
                         eventName: eventNamesList[index],
                         index: index,
-                        selectedIndex: selectedIndex,
+                        selectedIndex:
+                            isImageSelected == true
+                                ? eventNamesList.indexOf(eventModelArgs.eventName)
+                                : selectedIndex,
                         onTap: () {
+                          isImageSelected = false;
                           selectedIndex = index;
                           setState(() {});
                         },
@@ -200,7 +210,9 @@ class _EditEventScreenState extends State<EditEventScreen> {
                 isSelectedDate: isSelectedDate,
                 validationDateOrTimeText: AppLocalizations.of(context)!.please_enter_the_event_date,
                 chooseDateOrTime:
-                    selectedDate == null ? AppLocalizations.of(context)!.choose_date : formatedDate,
+                    selectedDate == null
+                        ? DateFormat('d MMMM yyyy').format(eventModelArgs.eventDateTime)
+                        : formatedDate,
               ),
               SizedBox(height: height * .02),
               EventDataOrTime(
@@ -215,8 +227,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
                 dateOrTime: AppLocalizations.of(context)!.event_time,
                 isSelectedTime: isSelectedTime,
                 validationDateOrTimeText: AppLocalizations.of(context)!.please_enter_the_event_time,
-                chooseDateOrTime:
-                    selectedTime == null ? AppLocalizations.of(context)!.choose_time : formatedTime,
+                chooseDateOrTime: selectedTime == null ? eventModelArgs.eventTime : formatedTime,
               ),
               SizedBox(height: height * .02),
               Text(
@@ -315,8 +326,8 @@ class _EditEventScreenState extends State<EditEventScreen> {
       // todo: update event to firestore
       EventModel updatedModel = EventModel(
         id: eventModelArgs.id,
-        eventImage: selectedEventImage,
-        eventName: selectedEventName,
+        eventImage: isImageSelected == true ? eventModelArgs.eventImage : selectedEventImage,
+        eventName: isImageSelected == true ? eventModelArgs.eventName : selectedEventName,
         eventitle: evenTitletController.text,
         eventDescription: descriptionController.text,
         eventDateTime: selectedDate!,
@@ -325,7 +336,9 @@ class _EditEventScreenState extends State<EditEventScreen> {
       eventsListProvider.updateEventFromFireStore(
         updatedModel,
         context,
-        userProvider.currentUSer!.id,
+        userProvider.currentUSer != null
+            ? userProvider.currentUSer!.id
+            : userProvider.googleUser!.user!.uid,
       );
       Navigator.pushNamedAndRemoveUntil(context, AppRoutes.homeRouteName, (route) => false);
     }

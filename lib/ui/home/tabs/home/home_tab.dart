@@ -25,8 +25,13 @@ class _HomeTabState extends State<HomeTab> {
     var userProvider = Provider.of<UserProvider>(context);
     eventsListProvider.getEventNameList(context);
     eventsListProvider.getImagePathList(context);
-    if (eventsListProvider.eventsList.isEmpty) {
-      eventsListProvider.getAllEvents(userProvider.currentUSer!.id);
+    if (eventsListProvider.eventsList.isEmpty ||
+        eventsListProvider.loadedUserId != userProvider.currentUSer?.id &&
+            eventsListProvider.loadedUserId != userProvider.googleUser?.user?.uid) {
+      final currentUserId = userProvider.currentUSer?.id ?? userProvider.googleUser?.user?.uid;
+
+      eventsListProvider.getAllEvents(currentUserId!);
+      eventsListProvider.loadedUserId = currentUserId;
     }
     return Scaffold(
       appBar: AppBar(
@@ -38,7 +43,12 @@ class _HomeTabState extends State<HomeTab> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(AppLocalizations.of(context)!.welcome_back, style: AppStyles.bold14Regular),
-                Text(userProvider.currentUSer!.name, style: AppStyles.bold24White),
+                Text(
+                  userProvider.currentUSer != null
+                      ? userProvider.currentUSer!.name
+                      : userProvider.googleUser!.user!.displayName.toString(),
+                  style: AppStyles.bold24White,
+                ),
               ],
             ),
             Spacer(),
@@ -97,10 +107,17 @@ class _HomeTabState extends State<HomeTab> {
                           index: index,
                           selectedIndex: eventsListProvider.selectedIndex,
                           onTap: () {
-                            eventsListProvider.changeSelectedIndex(
-                              index,
-                              userProvider.currentUSer!.id,
-                            );
+                            if (userProvider.currentUSer != null) {
+                              eventsListProvider.changeSelectedIndex(
+                                index,
+                                userProvider.currentUSer!.id,
+                              );
+                            } else {
+                              eventsListProvider.changeSelectedIndex(
+                                index,
+                                userProvider.googleUser!.user!.uid,
+                              );
+                            }
                           },
                         ),
                       );

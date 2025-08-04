@@ -14,6 +14,7 @@ class EventListProvider extends ChangeNotifier {
   List<String> eventsNameList = [];
   List<String> eventImagePathList = [];
   int selectedIndex = 0;
+  String? loadedUserId;
 
   List<String> getImagePathList(BuildContext context) {
     return eventImagePathList = [
@@ -52,6 +53,7 @@ class EventListProvider extends ChangeNotifier {
         }).toList();
 
     filterEventList = eventsList;
+    loadedUserId = uId;
     notifyListeners();
   }
 
@@ -86,7 +88,7 @@ class EventListProvider extends ChangeNotifier {
 
   void changeSelectedIndex(int newSelectedIndex, String uId) {
     selectedIndex = newSelectedIndex;
-    selectedIndex == 0 ? getAllEvents(uId) : getFilterEventsFromFireStore(uId);
+    selectedIndex == 0 ? getAllEvents(uId) : getFilterEvents(uId);
   }
 
   void updateEventFromFireStore(EventModel eventModel, BuildContext context, String uId) async {
