@@ -27,7 +27,7 @@ void saveLanguage(bool isEN) async {
 Future<bool> getAppLanguage() async {
   final SharedPreferences prefsLanguage = await SharedPreferences.getInstance();
 
-  var loadedLanguage = prefsLanguage.getBool(SharedPreferencesKeys.languageKey) ?? true;
+  var loadedLanguage = prefsLanguage.getBool(SharedPreferencesKeys.languageKey) ?? false;
 
   return loadedLanguage;
 }

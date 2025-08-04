@@ -52,9 +52,17 @@ class EditAndDeleteEvent extends StatelessWidget {
                 // todo: call a function to delete an event
                 eventListProvider.deleteEventFromFireStore(
                   event: eventModelArgs,
-                  uId: userProvider.currentUSer!.id,
+                  uId:
+                      userProvider.currentUSer != null
+                          ? userProvider.currentUSer!.id
+                          : userProvider.googleUser!.user!.uid,
                 );
-                eventListProvider.changeSelectedIndex(0, userProvider.currentUSer!.id);
+                eventListProvider.changeSelectedIndex(
+                  0,
+                  userProvider.currentUSer != null
+                      ? userProvider.currentUSer!.id
+                      : userProvider.googleUser!.user!.uid,
+                );
                 Navigator.of(
                   context,
                 ).pushNamedAndRemoveUntil(AppRoutes.homeRouteName, (route) => false);

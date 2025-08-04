@@ -1,4 +1,3 @@
-import 'package:evently_app/models/event_model.dart';
 import 'package:evently_app/providers/event_list_provider.dart';
 import 'package:evently_app/providers/user_provider.dart';
 import 'package:evently_app/ui/home/tabs/home/widgets/event_card.dart';
@@ -25,7 +24,11 @@ class _FavoriteTabState extends State<FavoriteTab> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      eventListProvider.getAllFavoriteEvents(userProvider.currentUSer!.id);
+      if (userProvider.currentUSer != null) {
+        eventListProvider.getAllFavoriteEventListFromFireStore(userProvider.currentUSer!.id);
+      } else {
+        eventListProvider.getAllFavoriteEventListFromFireStore(userProvider.googleUser!.user!.uid);
+      }
       // eventListProvider.getAllFavoriteEventListFromFireStore();
     });
     super.initState();
